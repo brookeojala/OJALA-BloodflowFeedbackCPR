@@ -34,17 +34,17 @@ const StatusDisplay = () => {
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
 
-    function sleep(ms: number) {
+    function sleep(ms: number) { // pause program functionality, buffer
         return new Promise<void>(resolve => setTimeout(resolve, ms));
     }
 
-    const stateRefresher = async (peripheralData : PeripheralInfo) => {
+    const stateRefresher = async (peripheralData : PeripheralInfo) => {// takes data from hardwarde and sets the current state, not exactly sure
         try {
             console.debug();
             console.debug("state refresh started");
             // console.debug(peripheralData);
             if(peripheralData){
-                let curr = await BleManager.read(peripheralData.id, peripheralData.services[0].uuid, peripheralData.characteristics[0].characteristic);
+                let curr = await BleManager.read(peripheralData.id, peripheralData.services[0].uuid, peripheralData.characteristics[0].characteristic); //read id, uuid, characteristic
                 console.debug("can read this");
                 let valueAsString = String.fromCharCode(...curr);
                 setCurrentState(valueAsString);
@@ -56,10 +56,10 @@ const StatusDisplay = () => {
         }
     }
 
-    const getPeripherals = async () => {
+    const getPeripherals = async () => {// seeing which peripherals there are
         console.debug('[useEffect] Connected peripheral:');
         const temp = await BleManager.getConnectedPeripherals();
-        console.debug(temp.length);
+        // console.debug(temp.length);
         setServerID(temp[0].id);
         const periphData = await BleManager.retrieveServices(temp[0].id);
         // console.debug("periphData:");
@@ -67,29 +67,29 @@ const StatusDisplay = () => {
         return periphData;
     }
 
-    const endSession = async () => {
+    const endSession = async () => {//ends CPR session
         await BleManager.disconnect(serverID);
         navigation.navigate('Home');
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
     }
 
-    React.useEffect( () => {
+    React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
         let intervalId : Object;
         const func = async () => {
             const periphData = await getPeripherals();
             console.debug("found periph");
             await sleep(5000);
-            intervalId = setInterval(() => {
+            intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                 stateRefresher(periphData)
             }, 100);
         };
         func();
-        return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId); // 
         }, [ref]
     )
 
-    return (
+    return (//returns the UI with the color and text
         <SafeAreaView style={currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : currentState === '2' ? styles.adequateBloodFlow : styles.noConnection}>
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text>
@@ -104,7 +104,7 @@ const StatusDisplay = () => {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({//styles for the app
     noBloodFlow: {
         backgroundColor: '#ff0000',
         flex: 1,
