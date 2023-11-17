@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
+///import Blink from './Blink';
 import {
     SafeAreaView,
     StyleSheet,
@@ -38,7 +39,7 @@ const StatusDisplay = () => {
         return new Promise<void>(resolve => setTimeout(resolve, ms));
     }
 
-    const stateRefresher = async (peripheralData : PeripheralInfo) => {// takes data from hardwarde and sets the current state, not exactly sure
+    const stateRefresher = async (peripheralData : PeripheralInfo) => {// takes data from hardwarde and sets the current state
         try {
             console.debug();
             console.debug("state refresh started");
@@ -82,21 +83,27 @@ const StatusDisplay = () => {
             await sleep(5000);
             intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                 stateRefresher(periphData)
-            }, 100);
+            }, 1000); // should be 100, changed for testing
         };
         func();
         return () => clearInterval(intervalId); // 
         }, [ref]
     )
+    
 
     return (//returns the UI with the color and text
         <SafeAreaView style={currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : currentState === '2' ? styles.adequateBloodFlow : styles.noConnection}>
             <Text>Connected device: {serverID}</Text>
-            <Text>Current state: {currentState}</Text>
-            <Text style={currentState === 'no connection' ? styles.noConnectionText : styles.statusText}>{currentState === '0' ? 'NO BLOOD FLOW' : currentState === '1' ? 'LOW BLOOD FLOW' : currentState === '2' ? 'ADEQUATE BLOOD FLOW': 'waiting for connection...'}
-            </Text>
+            <Text>Current state: {currentState}</Text> 
+             
+                <Text style={currentState === 'no connection' ? styles.noConnectionText : styles.statusText}>
+                    {currentState === '0' ? 'LOW' 
+                    : currentState === '1' ? 'OK' 
+                    : currentState === '2' ? 'GOOD': 'waiting for connection...'}
+                </Text>
+    
             <Pressable style={styles.exitButton} onPress={endSession}>
-                <Text>
+                <Text style = {styles.exitText}>
                     End CPR Session
                 </Text>
             </Pressable>
@@ -107,7 +114,7 @@ const StatusDisplay = () => {
 const styles = StyleSheet.create({//styles for the app
     noBloodFlow: {
         backgroundColor: '#ff0000',
-        flex: 1,
+        flex: 1,  
     },
     lowBloodFlow: {
         backgroundColor: '#c69035',
@@ -121,23 +128,31 @@ const styles = StyleSheet.create({//styles for the app
         backgroundColor: 'e8e8e8',
         flex: 1,
     },
+    exitText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
     exitButton: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 16,
+        paddingVertical: 50,
         backgroundColor: '#FFFAFA',
         margin: 10,
         borderRadius: 12,
-        marginTop: 70,
+        marginTop: 100,
+        fontSize: 20,
+        
     },
     statusText : {
-        marginHorizontal: 40,
+        marginHorizontal: 30,
         marginVertical: 200,
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 24,
+        fontSize: 60,
+        fontWeight: 'bold',
         letterSpacing: 0.25,
         color: Colors.white,
+        textAlign: 'center',
     },
     noConnectionText: {
         alignItems: 'center',

@@ -39,7 +39,7 @@ import { useNavigation } from '@react-navigation/native';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-declare module 'react-native-ble-manager' {
+declare module 'react-native-ble-manager' {// part of template, setting up module, adding varibles we need for this app
   // enrich local contract with custom state properties needed by App.tsx
   interface Peripheral {
     connected?: boolean;
@@ -48,11 +48,11 @@ declare module 'react-native-ble-manager' {
   }
 }
 
-const App = () => {
-  const navigation =  useNavigation();
-  const [isScanning, setIsScanning] = useState(false);
+const App = () => {  //state has to be here
+  const navigation =  useNavigation(); //navigation: react native library, used to naviagte between pages 
+  const [isScanning, setIsScanning] = useState(false); 
 
-  const [peripherals, setPeripherals] = useState(
+  const [peripherals, setPeripherals] = useState(  //peripheral is a bluetooth device
     new Map<Peripheral['id'], Peripheral>(),
   );
 
@@ -64,8 +64,8 @@ const App = () => {
     setPeripherals(map => new Map(map.set(id, updatedPeripheral)));
   };
 
-  const startScan = () => {
-    if (!isScanning) {
+  const startScan = () => { 
+    if (!isScanning) { 
       // reset found peripherals before scan
       setPeripherals(new Map<Peripheral['id'], Peripheral>());
 
@@ -94,7 +94,7 @@ const App = () => {
     console.debug('[handleStopScan] scan is stopped.');
   };
 
-  const handleDisconnectedPeripheral = (
+  const handleDisconnectedPeripheral = ( //does stuff when disconnected (listeners)
     event: BleDisconnectPeripheralEvent,
   ) => {
     let peripheral = peripherals.get(event.peripheral);
@@ -110,7 +110,7 @@ const App = () => {
     );
   };
 
-  const handleUpdateValueForCharacteristic = (
+  const handleUpdateValueForCharacteristic = ( // could be added as a listener to pick up the change in values ,, possible solution for inefficent code
     data: BleManagerDidUpdateValueForCharacteristicEvent,
   ) => {
     console.debug(
@@ -118,7 +118,7 @@ const App = () => {
     );
   };
 
-  const handleDiscoverPeripheral = (peripheral: Peripheral) => {
+  const handleDiscoverPeripheral = (peripheral: Peripheral) => { //only sees one device, runs on each peripheral that gets discovered
     console.debug('[handleDiscoverPeripheral] new BLE peripheral=', peripheral);
     if (!peripheral.name) {
       peripheral.name = 'NO NAME';
@@ -131,13 +131,13 @@ const App = () => {
     addOrUpdatePeripheral(peripheral.id, peripheral);
   };
 
-  const togglePeripheralConnection = async (peripheral: Peripheral) => {
+  const togglePeripheralConnection = async (peripheral: Peripheral) => { 
     const connectedPeripherals = await BleManager.getConnectedPeripherals();
-    if(connectedPeripherals.length === 1){
+    if(connectedPeripherals.length === 1){ //only connect one device
       console.debug('An ultrasound bluetooth server is already connected.');
       return;
     }
-    if (peripheral && peripheral.connected) {
+    if (peripheral && peripheral.connected) { //if something is already conencted and you try to connect it again, it disconnects
       try {
         let peripheralData = await BleManager.retrieveServices(peripheral.id);
         console.debug('Peripheral data');
@@ -154,7 +154,7 @@ const App = () => {
     }
   };
 
-  const retrieveConnected = async () => {
+  const retrieveConnected = async () => { //gets connected peripherals and tells you what is connected, for debug
     try {
       const connectedPeripherals = await BleManager.getConnectedPeripherals();
       if (connectedPeripherals.length === 0) {
@@ -181,7 +181,7 @@ const App = () => {
 
   const connectPeripheral = async (peripheral: Peripheral) => {
     try {
-      if (peripheral) {
+      if (peripheral) { // if peripheral exists, try to connect to it, updates values
         addOrUpdatePeripheral(peripheral.id, {...peripheral, connecting: true});
 
         await BleManager.connect(peripheral.id);
@@ -197,14 +197,14 @@ const App = () => {
         await sleep(900);
 
         /* Test read current RSSI value, retrieve services first */
-        const peripheralData = await BleManager.retrieveServices(peripheral.id);
+        const peripheralData = await BleManager.retrieveServices(peripheral.id); //data packets
         
         console.debug(
           `[connectPeripheral][${peripheral.id}] retrieved peripheral services`,
           peripheralData,
         );
         
-        const rssi = await BleManager.readRSSI(peripheral.id);
+        const rssi = await BleManager.readRSSI(peripheral.id); // how strong connection is
         console.debug(
           `[connectPeripheral][${peripheral.id}] retrieved current RSSI value: ${rssi}.`,
         );
@@ -212,7 +212,7 @@ const App = () => {
           `[connectPeripheral][${peripheral.id}] current characteristics: ${peripheralData.characteristics}.`,
         );
 
-        if(peripheralData.characteristics !== undefined){
+        if(peripheralData.characteristics !== undefined){ // goes thru each characteristic, prints, tries to read each value
           for(let characteristic of peripheralData.characteristics){
             console.debug(
               `[connectPeripheral][${peripheral.id}] current characteristic: ${characteristic.characteristic}.`,
@@ -222,7 +222,7 @@ const App = () => {
               let valueAsString = String.fromCharCode(...currValue);
               console.debug(`[connectPeripheral][${peripheral.id}] current characteristic: ${characteristic.characteristic}. Value: ${valueAsString}`,);
 
-              // console.debug('New changes');
+              // console.debug('New changes'); // tells when the value is changed (Not working rn)
               // console.debug(
               //   `[connectPeripheral][${peripheral.id}] service: ${peripheralData.services[0].uuid} characteristics: ${characteristic.characteristic}.`,
               // );
@@ -247,7 +247,7 @@ const App = () => {
                 console.debug("Peripheral id:");
                 console.debug(peripheral.id);
                 setPeripherals(new Map<Peripheral['id'], Peripheral>());
-                navigation.navigate('StatusDisplay');
+                navigation.navigate('StatusDisplay'); // navigate to second page
               } catch (e){
                 console.debug(e);
               }
@@ -274,7 +274,7 @@ const App = () => {
     return new Promise<void>(resolve => setTimeout(resolve, ms));
   }
 
-  useEffect(() => {
+  useEffect(() => { //first time page is loaded, starts object that handles bluetooth manager
     console.log("Manager: " + BleManager);
     try {
       BleManager.start({showAlert: false})
@@ -353,7 +353,7 @@ const App = () => {
         {Array.from(peripherals.values()).length === 0 && (
           <View style={styles.row}>
             <Text style={styles.noPeripherals}>
-              No Peripherals, press "Scan Bluetooth" above.
+              No devices found, press "Scan Bluetooth" above.
             </Text>
           </View>
         )}
