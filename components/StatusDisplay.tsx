@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-///import Blink from './Blink';
+import Blink from './Blink';
 import {
     SafeAreaView,
     StyleSheet,
@@ -95,16 +95,17 @@ const StatusDisplay = () => {
         <SafeAreaView style={currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : currentState === '2' ? styles.adequateBloodFlow : styles.noConnection}>
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
-             
+
+            <Blink duration={currentState === '0' ? 150 : currentState === '1' ? 350 : currentState === '2' ? 500 : 100}> 
                 <Text style={currentState === 'no connection' ? styles.noConnectionText : styles.statusText}>
                     {currentState === '0' ? 'LOW' 
                     : currentState === '1' ? 'OK' 
-                    : currentState === '2' ? 'GOOD': 'waiting for connection...'}
+                    : currentState === '2' ? 'ADEQUATE': 'waiting for connection...'}
                 </Text>
-    
+            </Blink> 
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
-                    End CPR Session
+                    End Session
                 </Text>
             </Pressable>
         </SafeAreaView>

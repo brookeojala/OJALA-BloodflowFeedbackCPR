@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Animated, View } from 'react-native'
 
+
 export default class Blink extends Component {
 
     constructor(props) {
@@ -12,12 +13,12 @@ export default class Blink extends Component {
         Animated.loop(
             Animated.sequence([
                 Animated.timing(this.fadeAnimation, {
-                    toValue: 0,
+                    toValue: 1,
                     duration: this.props.duration,
                     useNativeDriver: true,
                 }),
                 Animated.timing(this.fadeAnimation, {
-                    toValue: 1,
+                    toValue: 0,
                     duration: this.props.duration,
                     useNativeDriver: true,
                 })
@@ -26,6 +27,12 @@ export default class Blink extends Component {
                 iterations: this.props.repeat_count
             }
         ).start();
+    }
+    componentDidUpdate(prevProps) {
+        if ((this.props.duration !== prevProps.duration)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+        {
+            this.componentDidMount();
+        }
     }
 
     render() {
