@@ -83,7 +83,7 @@ const StatusDisplay = () => {
             await sleep(5000);
             intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                 stateRefresher(periphData)
-            }, 1000); // should be 100, changed for testing
+            }, 100); // should be 100, changed for testing
         };
         func();
         return () => clearInterval(intervalId); // 
@@ -96,11 +96,12 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Blink duration={currentState === '0' ? 150 : currentState === '1' ? 350 : currentState === '2' ? 500 : 100}> 
-                <Text style={currentState === 'no connection' ? styles.noConnectionText : styles.statusText}>
+            <Blink duration={currentState === '0' ? 150 : currentState === '1' ? 350 : currentState === '2' ? 500 : 1000}> 
+                <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
                     {currentState === '0' ? 'LOW' 
                     : currentState === '1' ? 'OK' 
-                    : currentState === '2' ? 'ADEQUATE': 'waiting for connection...'}
+                    : currentState === '2' ? 'ADEQUATE': 
+                    currentState === '3' ? 'no connection...' : 'waiting for connection...'}
                 </Text>
             </Blink> 
             <Pressable style={styles.exitButton} onPress={endSession}>
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({//styles for the app
         flex: 1,
     },
     noConnection: {
-        backgroundColor: 'e8e8e8',
+        backgroundColor: '#a9a9a9',
         flex: 1,
     },
     exitText: {
@@ -144,6 +145,17 @@ const styles = StyleSheet.create({//styles for the app
         fontSize: 20,
         
     },
+    noConnectionText: {
+        marginHorizontal: 30,
+        marginVertical: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 30,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: '#696969',
+        textAlign: 'center',
+    },
     statusText : {
         marginHorizontal: 30,
         marginVertical: 200,
@@ -155,12 +167,6 @@ const styles = StyleSheet.create({//styles for the app
         color: Colors.white,
         textAlign: 'center',
     },
-    noConnectionText: {
-        alignItems: 'center',
-        fontSize: 24,
-        letterSpacing: 0.25,
-        color: Colors.black,
-    }
 });
 
 export default StatusDisplay;

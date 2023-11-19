@@ -29,7 +29,7 @@ export default class Blink extends Component {
         ).start();
     }
     componentDidUpdate(prevProps) {
-        if ((this.props.duration !== prevProps.duration)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+        if ((this.props.duration !== prevProps.duration)) // Check if it's a new duration and refreshes the component
         {
             this.componentDidMount();
         }
