@@ -21,6 +21,7 @@ import {
 // import { bytesToString } from "convert-string";
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Blink from './Blink';
 
 const SECONDS_TO_SCAN_FOR = 7;
 const SERVICE_UUIDS: string[] = [];
@@ -222,7 +223,7 @@ const App = () => {  //state has to be here
               let valueAsString = String.fromCharCode(...currValue);
               console.debug(`[connectPeripheral][${peripheral.id}] current characteristic: ${characteristic.characteristic}. Value: ${valueAsString}`,);
 
-              // console.debug('New changes'); // tells when the value is changed (Not working rn)
+              // console.debug('New changes'); // tells when the value is changed (Not working rn) here
               // console.debug(
               //   `[connectPeripheral][${peripheral.id}] service: ${peripheralData.services[0].uuid} characteristics: ${characteristic.characteristic}.`,
               // );
@@ -242,7 +243,7 @@ const App = () => {  //state has to be here
               //     const data = String.fromCharCode(...value);
               //     console.log(`Received ${data} for characteristic ${characteristic}`);
               //   }
-              // );
+              // ); // until here was commented out
               try {
                 console.debug("Peripheral id:");
                 console.debug(peripheral.id);
@@ -340,7 +341,7 @@ const App = () => {  //state has to be here
 
         <Pressable style={styles.scanButton} onPress={startScan}>
           <Text style={styles.scanButtonText}>
-            {isScanning ? 'Scanning...' : 'Scan For CPR Feedback Device'}
+            {isScanning ? 'Scanning...' : 'Scan for Device'}
           </Text>
         </Pressable>
 
@@ -352,9 +353,11 @@ const App = () => {  //state has to be here
 
         {Array.from(peripherals.values()).length === 0 && (
           <View style={styles.row}>
-            <Text style={styles.noPeripherals}>
-              No devices found, press "Scan Bluetooth" above.
-            </Text>
+            <Blink duration = {700} >
+              <Text style={styles.noPeripherals}>
+                No devices found, press "Scan Bluetooth" above.
+              </Text>
+            </Blink>
           </View>
         )}
 
@@ -398,7 +401,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   scanButtonText: {
-    fontSize: 20,
+    fontSize: 35,
+    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: Colors.white,
   },
@@ -454,10 +458,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   noPeripherals: {
+    fontSize: 15,
     margin: 10,
     textAlign: 'center',
     color: Colors.white,
   },
+  displayPeripherals: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: Colors.blue,
+  }
 });
 
 export default App;
