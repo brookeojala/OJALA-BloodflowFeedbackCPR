@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import Blink from './Blink';
+import Bar from './Bar';
 
 
 import {
@@ -98,14 +99,16 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Blink duration={currentState === '0' ? 150 : currentState === '1' ? 350 : currentState === '2' ? 500 : 1000}> 
-                <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
-                    {currentState === '0' ? 'LOW' 
-                    : currentState === '1' ? 'OK' 
-                    : currentState === '2' ? 'ADEQUATE': 
-                    currentState === '3' ? 'no connection...' : 'waiting for connection...'}
-                </Text>
-            </Blink> 
+            <Bar style={styles.bar}>
+                <Pressable>
+                    <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
+                        {currentState === '0' ? 'LOW' 
+                        : currentState === '1' ? 'OK' 
+                        : currentState === '2' ? 'ADEQUATE': 
+                        currentState === '3' ? 'no connection...' : 'waiting for connection...'}
+                    </Text>
+                </Pressable>
+            </Bar> 
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session
@@ -116,6 +119,12 @@ const StatusDisplay = () => {
 }
 
 const styles = StyleSheet.create({//styles for the app
+    bar: {
+        width: 300,
+        backgroundColor: '#c0c0c0',
+        marginHorizontal: 40,
+        flex: 2,
+    },
     noBloodFlow: {
         backgroundColor: '#ff0000',
         flex: 1,  
@@ -138,13 +147,15 @@ const styles = StyleSheet.create({//styles for the app
     },
     exitButton: {
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         paddingVertical: 50,
         backgroundColor: '#FFFAFA',
         margin: 10,
+        marginTop: 200,
         borderRadius: 12,
-        marginTop: 100,
         fontSize: 20,
+        flex: 1, // testing flex
+        flexDirection: 'column',
         
     },
     noConnectionText: {
