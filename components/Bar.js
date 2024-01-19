@@ -4,19 +4,19 @@ import React, { Component } from 'react'
 export default class Bar extends Component {
     constructor(props) {
         super(props);
-        this.stretchAnimation = new Animated.Value(50);
+        this.stretchAnimation = new Animated.Value(400);
     }
 
     componentDidMount() {
         Animated.loop(
             Animated.sequence([
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 200, //placeholder
+                    toValue: 50, //placeholder
                     duration: 273,
                     useNativeDriver: false,
                 }),
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 50,
+                    toValue: 400,
                     duration: 273,
                     useNativeDriver: false,
                 })
