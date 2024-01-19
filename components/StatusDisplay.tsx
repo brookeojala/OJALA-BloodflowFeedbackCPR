@@ -103,7 +103,7 @@ const StatusDisplay = () => {
             <Bar style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
                 <View style = {styles.container}> 
                 <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
-                    {currentState === '0' ? 'testing' 
+                    {currentState === '0' ? 'LOW' 
                     : currentState === '1' ? 'OK' 
                     : currentState === '2' ? 'ADEQUATE': 
                     currentState === '3' ? 'no connection...' : 'waiting for connection...'}
@@ -124,10 +124,10 @@ const StatusDisplay = () => {
 
 const styles = StyleSheet.create({//styles for the app
     bar: {
-        extAlign: 'center',
+        textAlign: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 300,
+        bottom: 240,
         width: 300,
         backgroundColor: '#c0c0c0',
         marginHorizontal: 40,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({//styles for the app
         textAlign: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 300,
+        bottom: 240,
         width: 300,
         backgroundColor: 'darkred',
         marginHorizontal: 40,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({//styles for the app
         textAlign: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 300,
+        bottom: 240,
         width: 300,
         backgroundColor: '#c69035',
         marginHorizontal: 40,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({//styles for the app
         textAlign: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 300,
+        bottom: 240,
         width: 300,
         backgroundColor: 'green',
         marginHorizontal: 40,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({//styles for the app
         flex: 1,
     },
     exitText: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
     },
     exitButton: {
@@ -199,20 +199,18 @@ const styles = StyleSheet.create({//styles for the app
         margin: 20,
         marginTop: 660,
         borderRadius: 12,
-        fontSize: 15,
         width: 350,
         position: 'absolute',
+        height: 125,
         
     },
     noConnectionText: {
-        textAlign: 'center',
-        alignItems: 'center',
+        fontSize: 30, // i dont think this fits
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: '696969',
         position: 'absolute',
-        bottom: 300,
-        width: 300,
-        backgroundColor: '696969',
-        marginHorizontal: 40,
-        borderRadius: 12,
+        bottom: 0,
     },
     statusText : {
         fontSize: 40,
