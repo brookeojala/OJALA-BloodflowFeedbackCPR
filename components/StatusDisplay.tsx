@@ -101,7 +101,7 @@ const StatusDisplay = () => {
             <Text>Current state: {currentState}</Text> 
 
             <Bar style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
-                <View style = {styles.container}>
+                <View style = {styles.container}> 
                 <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
                     {currentState === '0' ? 'testing' 
                     : currentState === '1' ? 'OK' 
@@ -124,8 +124,9 @@ const StatusDisplay = () => {
 
 const styles = StyleSheet.create({//styles for the app
     bar: {
-        position: 'relative',
-        justifyContent: 'center',
+        extAlign: 'center',
+        alignItems: 'center',
+        position: 'absolute',
         bottom: 300,
         width: 300,
         backgroundColor: '#c0c0c0',
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({//styles for the app
         position: 'absolute',
         bottom: 0,
         left: 0,
-        backgroundColor: '000000',
+        //backgroundColor: '000000', for debug
     },
     barNo: {
         textAlign: 'center',
@@ -150,6 +151,8 @@ const styles = StyleSheet.create({//styles for the app
         borderRadius: 12,
     },
     barLow: {
+        textAlign: 'center',
+        alignItems: 'center',
         position: 'absolute',
         bottom: 300,
         width: 300,
@@ -158,12 +161,15 @@ const styles = StyleSheet.create({//styles for the app
         borderRadius: 12,
     },
     barAdequate: {
+        textAlign: 'center',
+        alignItems: 'center',
         position: 'absolute',
         bottom: 300,
         width: 300,
         backgroundColor: 'green',
         marginHorizontal: 40,
         borderRadius: 12,
+
     },
     noBloodFlow: {
         backgroundColor: '#ff0000',
@@ -186,7 +192,6 @@ const styles = StyleSheet.create({//styles for the app
         fontWeight: 'bold',
     },
     exitButton: {
-        //flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 50,
@@ -196,42 +201,26 @@ const styles = StyleSheet.create({//styles for the app
         borderRadius: 12,
         fontSize: 15,
         width: 350,
-        //flexDirection: 'column',
-        height: 150,
-        //flex: 1,
         position: 'absolute',
         
     },
     noConnectionText: {
-        //marginHorizontal: 30,
-        // marginVertical: 200,
-        // justifyContent: 'center',
-        //alignItems: 'center',
-        position: 'relative',
-        bottom: 0,
-        fontSize: 30,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: '#696969',
         textAlign: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 300,
+        width: 300,
+        backgroundColor: '696969',
+        marginHorizontal: 40,
+        borderRadius: 12,
     },
     statusText : {
-        //marginHorizontal: 10,
-        //justifyContent: 'flex-end',
-        // alignItems: 'center', 
-        //flexDirection: 'column-reverse',
-        //alginItems: 'center',
-        //justifyContent: 'center',
-        // position: 'absolute',
-        // bottom: 0,
-        // left: 0,
         fontSize: 40,
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: Colors.white,
         position: 'absolute',
         bottom: 0,
-        //textAlign: 'center',
     },
 });
 
