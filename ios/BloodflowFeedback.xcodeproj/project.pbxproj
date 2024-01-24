@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		26616E2E2B5F6774004A0120 /* Perc_MetronomeQuartz_hi.wav in Resources */ = {isa = PBXBuildFile; fileRef = 26616E2D2B5F6774004A0120 /* Perc_MetronomeQuartz_hi.wav */; };
 		26C0D7FB2AECB48E00DF2D65 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-BloodflowFeedback-BloodflowFeedbackTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-BloodflowFeedback-BloodflowFeedbackTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -38,6 +39,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BloodflowFeedback/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BloodflowFeedback/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-BloodflowFeedback-BloodflowFeedbackTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BloodflowFeedback-BloodflowFeedbackTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26616E2D2B5F6774004A0120 /* Perc_MetronomeQuartz_hi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Perc_MetronomeQuartz_hi.wav; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-BloodflowFeedback.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloodflowFeedback.debug.xcconfig"; path = "Target Support Files/Pods-BloodflowFeedback/Pods-BloodflowFeedback.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-BloodflowFeedback.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloodflowFeedback.release.xcconfig"; path = "Target Support Files/Pods-BloodflowFeedback/Pods-BloodflowFeedback.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-BloodflowFeedback-BloodflowFeedbackTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloodflowFeedback-BloodflowFeedbackTests.debug.xcconfig"; path = "Target Support Files/Pods-BloodflowFeedback-BloodflowFeedbackTests/Pods-BloodflowFeedback-BloodflowFeedbackTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				26616E2D2B5F6774004A0120 /* Perc_MetronomeQuartz_hi.wav */,
 				13B07FAE1A68108700A75B9A /* BloodflowFeedback */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BloodflowFeedbackTests */,
@@ -245,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26616E2E2B5F6774004A0120 /* Perc_MetronomeQuartz_hi.wav in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

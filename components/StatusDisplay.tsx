@@ -2,7 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import Blink from './Blink';
 import Bar from './Bar';
-import MarginVary from './MarginVary';
+//import MetronomeModule from 'react-native-metronome-module';
+import Sound from 'react-native-sound';
+
+
 
 
 import {
@@ -94,9 +97,14 @@ const StatusDisplay = () => {
         }, [ref]
     )
     
+    //const sound = new Sound('metronome.wav');
+   // MetronomeModule.setBPM(110);
+    //MetronomeModule.start();
 
     return (//returns the UI with the color and text
+
         <SafeAreaView style={currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : currentState === '2' ? styles.adequateBloodFlow : styles.noConnection}>
+
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
@@ -111,7 +119,11 @@ const StatusDisplay = () => {
                 </View>
 
             </Bar> 
+            {/* <div>
+                MetronomeModule.setBPM(110);
+                MetronomeModule.start();
 
+            </div> */}
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session
