@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import Blink from './Blink';
 import Bar from './Bar';
-//import MetronomeModule from 'react-native-metronome-module';
+import Metronome from './Metronome';
 import Sound from 'react-native-sound';
 
 
@@ -97,9 +97,6 @@ const StatusDisplay = () => {
         }, [ref]
     )
     
-    //const sound = new Sound('metronome.wav');
-   // MetronomeModule.setBPM(110);
-    //MetronomeModule.start();
 
     return (//returns the UI with the color and text
 
@@ -107,6 +104,8 @@ const StatusDisplay = () => {
 
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
+            <Metronome>
+            </Metronome>
 
             <Bar style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
                 <View style = {styles.container}> 
@@ -114,16 +113,11 @@ const StatusDisplay = () => {
                     {currentState === '0' ? 'LOW' 
                     : currentState === '1' ? 'OK' 
                     : currentState === '2' ? 'ADEQUATE': 
-                    currentState === '3' ? 'no connection...' : 'waiting for connection...'}
+                    currentState === '3' ? 'no connection...' : 'waiting ...'}
                 </Text>
                 </View>
 
             </Bar> 
-            {/* <div>
-                MetronomeModule.setBPM(110);
-                MetronomeModule.start();
-
-            </div> */}
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session
@@ -232,6 +226,18 @@ const styles = StyleSheet.create({//styles for the app
         position: 'absolute',
         bottom: 0,
     },
+    metronome : {
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 50,
+        backgroundColor: '#FFFAFA',
+        margin: 20,
+        marginTop: 660,
+        borderRadius: 12,
+        width: 350,
+        position: 'absolute',
+        height: 125,
+    }
 });
 
 export default StatusDisplay;
