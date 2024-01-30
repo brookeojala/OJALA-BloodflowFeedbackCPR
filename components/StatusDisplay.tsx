@@ -46,6 +46,13 @@ const StatusDisplay = () => {
         return new Promise<void>(resolve => setTimeout(resolve, ms));
     }
 
+    const debugRefresher = async (newState : string) => {
+        console.debug();
+        console.debug("state refresh started");
+        // console.debug(peripheralData);
+        setCurrentState(newState);
+    }
+
     const stateRefresher = async (peripheralData : PeripheralInfo) => {// takes data from hardwarde and sets the current state
         try {
             console.debug();
@@ -85,12 +92,21 @@ const StatusDisplay = () => {
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
         let intervalId : Object;
         const func = async () => {
-            const periphData = await getPeripherals();
-            console.debug("found periph");
-            await sleep(5000);
-            intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                stateRefresher(periphData)
-            }, 100); // should be 100, changed for testing
+            let debugOption = true;
+            let crap = '0';
+            if (debugOption) {
+                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
+                    debugRefresher(crap);
+                }, 500); // should be 100, changed high for debug mode testing
+            } else {
+                const periphData = await getPeripherals();
+                console.debug("found periph");
+                await sleep(5000);
+                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
+                    stateRefresher(periphData)
+                }, 100); // should be 100, changed high for debug mode testing
+            }
+
         };
         func();
         return () => clearInterval(intervalId); // 
