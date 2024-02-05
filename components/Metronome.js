@@ -1,92 +1,99 @@
 import React, { Component, useState } from 'react'
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
-import tick from './metronome.wav'
+import tickSound from './metronome.wav'
 
-//var Sound = require('react-native-sound');
+var tick = new Sound(tickSound, '', (error) => {
+    if (error) {
+        console.log('failed to load the sound', error);
+        return;
+    }
+});
+async function looping(isLooping) {
 
+    (async () => {
+        while (isLooping) {
+            setTimeout(tick.play((success) => {
+                if (success) {
+                    console.log('successfully finished playing');
+                } else {
+                    console.log('playback failed due to audio decoding errors');
+                }
+            }), 100);
+        }
+    })();
+    //tick.stop();
+}
+function startStop(component) {
+    console.log('click');
+    //component.setState({ isPlaying: !isPlaying });
+
+    if (component.state.ButtonText === 'Start') {
+        component.setState({ ButtonText: 'Stop' });
+        //tick.setNumberOfLoops(-1);
+        looping(true);
+
+    } else {
+        component.setState({ ButtonText: 'Start' });
+        looping(false);
+        //tick.stop();
+    }
+
+
+
+
+    // this.tick.play(success => {
+    //     if (success) {
+    //         console.log('successfully finished playing');
+    //     } else {
+    //         console.log('playback failed due to audio decoding errors');
+    //     }
+    // });
+}
 
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
             bpm: '110',
-            isPlaying: 'false',
+            //isPlaying: 'false',
             ButtonText: 'Start'
         }
-        // const [isPlaying, setIsPlaying] = useState(true);
-        // const [bpm, setBpm] = useState(110);
-
-
-        Sound.setCategory('Playback');
-        this.tick = new Sound('./metronome.wav', Sound.MAIN_BUNDLE, (error) => {
-            if (error) {
-                console.log('failed to load the sound', error);
-                return;
-            }
-            //loaded sucessfully
-            console.log('duration in seconds: ' + tick.getDuration() + 'number of seconds');
-
-            //play the sound with an onEnd callback
-            this.tick.play(success => {
-                if (success) {
-                    console.log('successfully finished playing');
-                } else {
-                    console.log('playback failed due to audio decoding errors');
-                }
-            });
-        });
+        Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
     }
 
     // handleBpmChange = event => {
     //     const bpm = event.target.value;
     //     this.setState([bpm]);
     // }
-    startStop() {
-        console.log();
-        this.setState({ isPlaying: !isPlaying });
-        if (this.state.isPlaying) {
-            this.state.ButtonText = "Stop";
-        } else {
-            this.state.ButtonText = "Start";
-        }
 
-
-
-        // this.tick.play(success => {
-        //     if (success) {
-        //         console.log('successfully finished playing');
-        //     } else {
-        //         console.log('playback failed due to audio decoding errors');
-        //     }
-        // });
-    }
 
     render() {
 
 
-
-
-        // const { playing, bpm } = this.state;
-
-
         return (
-            <View style={styles.metronome}>
-                <View>
-                    <Text style={styles.metronomeText}>{this.state.bpm} BPM</Text>
-                    {/* <input
+            <Pressable onPress={() => {
+                console.log('button clicked');
+                return startStop(this);
+
+            }} style={styles.metronome}>
+                <View style={styles.metronome}>
+                    <View>
+                        <Text style={styles.metronomeText}>{this.state.bpm} BPM</Text>
+                        {/* <input
                         type='range'
                         min='100'
                         max='240'
                         value={bpm}
                         onChange={this.handleBpmChange} /> */}
-                </View>
-                <Pressable onPress={this.state.startStop}>
+                    </View>
+
                     <Text style={styles.metronomeText}>
                         {this.state.ButtonText}
                     </Text>
-                </Pressable>
-            </View>
+
+                </View>
+            </Pressable>
         )
     }
 }
