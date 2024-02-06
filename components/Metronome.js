@@ -1,65 +1,58 @@
 import React, { Component, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
-import tickSound from './metronome.wav'
+import tickSoundFile from './metronome.wav'
 
-var tick = new Sound(tickSound, '', (error) => {
+var tickSound = new Sound(tickSoundFile, '', (error) => {
     if (error) {
         console.log('failed to load the sound', error);
         return;
     }
 });
-async function looping(isLooping) {
 
-    (async () => {
-        while (isLooping) {
-            setTimeout(tick.play((success) => {
-                if (success) {
-                    console.log('successfully finished playing');
-                } else {
-                    console.log('playback failed due to audio decoding errors');
-                }
-            }), 100);
-        }
-    })();
-    //tick.stop();
-}
 function startStop(component) {
-    console.log('click');
-    //component.setState({ isPlaying: !isPlaying });
+    // console.log('click');
 
     if (component.state.ButtonText === 'Start') {
+        component.setState({ isPlaying: true });
+        component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Stop' });
-        //tick.setNumberOfLoops(-1);
-        looping(true);
-
+        var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
+        component.setState({ soundID: id });
     } else {
+        component.setState({ isPlaying: false });
+        component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Start' });
-        looping(false);
-        //tick.stop();
+        clearInterval(component.state.soundID);
     }
-
-
-
-
-    // this.tick.play(success => {
-    //     if (success) {
-    //         console.log('successfully finished playing');
-    //     } else {
-    //         console.log('playback failed due to audio decoding errors');
-    //     }
-    // });
 }
 
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bpm: '110',
-            //isPlaying: 'false',
-            ButtonText: 'Start'
+            bpm: 110,
+            isPlaying: false,
+            ButtonText: 'Start',
+            timer: 0,
+            started: false
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
+        // var obj = this;
+        // var id = setInterval(() => { obj.tick(1) }, 1);
+    }
+
+    tick(deltaT) {
+        if (this.state.isPlaying) {
+            this.state.timer -= deltaT;
+            //this.setState({ timer: this.state.timer - deltaT }); // ms
+            if (this.state.timer <= 0) {
+                tickSound.play();
+                // console.log("played");
+                this.state.timer += 60000 / this.state.bpm;
+                //this.setState({ timer: this.state.timer + 60000 / this.state.bpm }); // add ms per beat
+            }
+        }
     }
 
     // handleBpmChange = event => {

@@ -9,11 +9,6 @@ export default class Bar extends Component {
         super(props);
         this.stretchAnimation = new Animated.Value(240);
     }
-    // playingMetronome() {
-    // MetronomeModule.setBPM(110);
-    // MetronomeModule.setShouldPauseOnLostFocus(true);
-    // MetronomeModule.start();
-    //}
     componentDidMount() {
         Animated.loop(
             Animated.sequence([
@@ -33,11 +28,6 @@ export default class Bar extends Component {
             }
         ).start();
 
-        // if (await MetronomeModule.isPlaying()) {
-        //     const bpm = await MetronomeModule.getBPM();
-        //     console.log(`Metronome playing at ${bpm}bpm!`);
-
-        // }
     }
     componentDidUpdate(prevProps) {
         if ((this.props.color !== prevProps.color)) // check if color changed
