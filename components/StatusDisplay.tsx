@@ -5,9 +5,6 @@ import Bar from './Bar';
 import Metronome from './Metronome';
 import Sound from 'react-native-sound';
 
-
-
-
 import {
     SafeAreaView,
     StyleSheet,
@@ -120,6 +117,7 @@ const StatusDisplay = () => {
 
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
+
             <Metronome>
             </Metronome>
 

@@ -17,29 +17,50 @@ function startStop(component) {
         component.setState({ isPlaying: true });
         component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Stop' });
+        //create rate of tickSound by setting the intervals of pause
         var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
+        //interval is stored as id
         component.setState({ soundID: id });
     } else {
         component.setState({ isPlaying: false });
         component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Start' });
+        //reset interval by clearing id
         clearInterval(component.state.soundID);
     }
 }
+function increaseBpm(component) {
+    //set new bpm
+    var newBPM = component.state.bpm + 1;
+    component.setState({ bpm: newBPM });
+    //reset rate of tickSound
+    clearInterval(component.state.soundID);
+    var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
+    component.setState({ soundID: id });
 
+}
+function decreaseBpm(component) {
+    var newBPM = component.state.bpm - 1;
+    if (newBPM >= 2) {
+        //set new bpm if above 2
+        component.setState({ bpm: newBPM });
+        //reset rate of tick sound
+        clearInterval(component.state.soundID);
+        var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
+        component.setState({ soundID: id });
+    }
+}
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bpm: 110,
+            bpm: 50,
             isPlaying: false,
             ButtonText: 'Start',
             timer: 0,
             started: false
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
-        // var obj = this;
-        // var id = setInterval(() => { obj.tick(1) }, 1);
     }
 
     tick(deltaT) {
@@ -55,52 +76,83 @@ export default class Metronome extends Component {
         }
     }
 
-    // handleBpmChange = event => {
-    //     const bpm = event.target.value;
-    //     this.setState([bpm]);
-    // }
-
-
     render() {
 
 
         return (
-            <Pressable onPress={() => {
-                console.log('button clicked');
-                return startStop(this);
 
-            }} style={styles.metronome}>
-                <View style={styles.metronome}>
-                    <View>
-                        <Text style={styles.metronomeText}>{this.state.bpm} BPM</Text>
-                        {/* <input
-                        type='range'
-                        min='100'
-                        max='240'
-                        value={bpm}
-                        onChange={this.handleBpmChange} /> */}
-                    </View>
-
+            <View style={styles.metronome}>
+                <View>
                     <Text style={styles.metronomeText}>
-                        {this.state.ButtonText}
+                        {this.state.bpm} BPM
                     </Text>
 
                 </View>
-            </Pressable>
+                <View style={styles.selector}>
+                    <Pressable onPress={() => {
+                        console.log(' - button clicked');
+                        return decreaseBpm(this);
+                    }} style={styles.buttons}>
+
+                        <Text style={styles.plusMinus}>
+                            -
+                        </Text>
+
+                    </Pressable>
+
+                    <Pressable onPress={() => {
+                        console.log('start/stop button clicked');
+                        return startStop(this);
+                    }}
+                        style={styles.buttons}>
+
+                        <Text style={styles.metronomeText}>
+                            {this.state.ButtonText}
+                        </Text>
+                    </Pressable>
+
+                    <Pressable onPress={() => {
+                        console.log('+ button clicked');
+                        return increaseBpm(this);
+                    }} style={styles.buttons}>
+
+                        <Text style={styles.plusMinus}>
+                            +
+                        </Text>
+
+                    </Pressable>
+                </View>
+
+            </View>
+
         )
     }
 }
 const styles = StyleSheet.create({
     metronome: {
+        //display: 'flex',
+        //flexDirection: 'row',
         textAlign: 'center',
         alignItems: 'center',
-        //position: 'absolute',
         width: 300,
         backgroundColor: 'white',
         marginHorizontal: 40,
         borderRadius: 12,
+        //flexDirection: 'row',
+    },
+    buttons: {
+        //backgroundColor: 'red', // for debug
+        marginHorizontal: 30
     },
     metronomeText: {
         fontSize: 25,
+        fontWeight: 'bold',
+    },
+    selector: {
+        flexDirection: 'row',
+    },
+    plusMinus: {
+        fontSize: 30,
+        fontWeight: 'bold',
     }
 })
