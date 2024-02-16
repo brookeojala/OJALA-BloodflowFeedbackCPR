@@ -54,7 +54,7 @@ export default class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bpm: 50,
+            bpm: 110,
             isPlaying: false,
             ButtonText: 'Start',
             timer: 0,
