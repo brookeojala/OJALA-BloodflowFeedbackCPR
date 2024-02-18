@@ -1,24 +1,23 @@
-import { Animated, View, StyleSheet } from 'react-native'
+import { Animated, View, StyleSheet, Pressable, Text } from 'react-native'
 import React, { Component } from 'react'
 //import metronone from './metronome.wav'
 import Sound from 'react-native-sound'
 //import MetronomeModule from "react-native-metronome-module";
 
-function bpmToDuration(componenet) { // converts bpm to ms per beat
-    var duration = 60000 / componenet.bpm; //ms per beat
-    componenet.setState({ animationDuration: (duration / 2) }); // halved for the two parts of the animation (up/down)
-
-}
-
 export default class Bar extends Component {
     constructor(props) {
         super(props);
         this.stretchAnimation = new Animated.Value(240);
+        var newAnimDuration = (60000 / this.props.bpm) / 2;
 
         this.state = {
-            bpm: 110, //default bpm 110
-            animationDuration: 273 //default animationDuration 273
+            animationDuration: newAnimDuration//default animationDuration 273
         }
+    }
+
+    updateDuration() {
+        var newAnimDuration = (60000 / this.props.bpm) / 2;
+        this.setState({ animationDuration: newAnimDuration });
     }
 
     componentDidMount() {
@@ -45,10 +44,11 @@ export default class Bar extends Component {
         ).start();
 
     }
+
     componentDidUpdate(prevProps) {
         if ((this.props.bpm !== prevProps.bpm)) // check if bpm changed
         {
-            bpmToDuration(this);
+            this.updateDuration();//bpmToDuration(this);
             this.componentDidMount();
         }
     }
@@ -58,9 +58,36 @@ export default class Bar extends Component {
             <View style={{ ...this.props.style }}>
                 <Animated.View style={{ height: this.stretchAnimation }}>
                     {this.props.children}
+
                 </Animated.View>
+                {/* <Pressable onPress={() => {
+                    console.log(' - button clicked');
+                    return decreaseBpm(this), this.componentDidMount();
+                }}>
+
+                    <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+                        -
+                    </Text>
+
+                </Pressable>
+
+                <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+                    {this.props.bpm}
+                </Text>
+
+                <Pressable onPress={() => {
+                    console.log('+ button clicked');
+                    return increaseBpm(this), this.componentDidMount();
+                }}>
+
+                    <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+                        +
+                    </Text>
+
+                </Pressable> */}
 
             </View>
         )
     }
+
 }

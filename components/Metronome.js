@@ -18,7 +18,7 @@ function startStop(component) {
         component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Stop' });
         //create rate of tickSound by setting the intervals of pause
-        var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
+        var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
         //interval is stored as id
         component.setState({ soundID: id });
     } else {
@@ -29,32 +29,37 @@ function startStop(component) {
         clearInterval(component.state.soundID);
     }
 }
+
+function resetMetronome(component) {
+    if (component.state.isPlaying) {
+        clearInterval(component.state.soundID);
+        var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
+        component.setState({ soundID: id });
+    }
+}
+
 function increaseBpm(component) {
     //set new bpm
-    var newBPM = component.state.bpm + 1;
-    component.setState({ bpm: newBPM });
+    var newBPM = component.props.bpm + 1;
+    component.state.setBpm(newBPM);
     //reset rate of tickSound
-    clearInterval(component.state.soundID);
-    var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
-    component.setState({ soundID: id });
+    resetMetronome(component);
 
 }
 function decreaseBpm(component) {
-    var newBPM = component.state.bpm - 1;
-    if (newBPM >= 2) {
-        //set new bpm if above 2
-        component.setState({ bpm: newBPM });
+    var newBPM = component.props.bpm - 1;
+    if (newBPM >= 1) {
+        //set new bpm if above 1
+        component.state.setBpm(newBPM);
         //reset rate of tick sound
-        clearInterval(component.state.soundID);
-        var id = setInterval(() => { tickSound.play() }, 60000 / component.state.bpm);
-        component.setState({ soundID: id });
+        resetMetronome(component);
     }
 }
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bpm: 110,
+            setBpm: props.setBpm,
             isPlaying: false,
             ButtonText: 'Start',
             timer: 0,
@@ -63,18 +68,18 @@ export default class Metronome extends Component {
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
     }
 
-    tick(deltaT) {
-        if (this.state.isPlaying) {
-            this.state.timer -= deltaT;
-            //this.setState({ timer: this.state.timer - deltaT }); // ms
-            if (this.state.timer <= 0) {
-                tickSound.play();
-                // console.log("played");
-                this.state.timer += 60000 / this.state.bpm;
-                //this.setState({ timer: this.state.timer + 60000 / this.state.bpm }); // add ms per beat
-            }
-        }
-    }
+    // tick(deltaT) {
+    //     if (this.state.isPlaying) {
+    //         this.state.timer -= deltaT;
+    //         //this.setState({ timer: this.state.timer - deltaT }); // ms
+    //         if (this.state.timer <= 0) {
+    //             tickSound.play();
+    //             // console.log("played");
+    //             this.state.timer += 60000 / this.props.bpm;
+    //             //this.setState({ timer: this.state.timer + 60000 / this.props.bpm }); // add ms per beat
+    //         }
+    //     }
+    // }
 
     render() {
 
@@ -84,7 +89,7 @@ export default class Metronome extends Component {
             <View style={styles.metronome}>
                 <View>
                     <Text style={styles.metronomeText}>
-                        {this.state.bpm} BPM
+                        {this.props.bpm} BPM
                     </Text>
 
                 </View>

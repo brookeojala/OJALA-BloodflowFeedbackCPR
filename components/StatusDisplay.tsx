@@ -38,6 +38,12 @@ const StatusDisplay = () => {
     const [currentState, setCurrentState] = React.useState("no connection");
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
+    const [bpm, setBpm] = React.useState(110);
+    // bpm state is stored in this parent class,
+    // passed as props to the child components,
+    // metronome and bar both receive the parent bpm in props
+    // metronome can use setBpm to update the parent state,
+    // so that both metronome and bar are using the same bpm
 
     function sleep(ms: number) { // pause program functionality, buffer
         return new Promise<void>(resolve => setTimeout(resolve, ms));
@@ -90,7 +96,7 @@ const StatusDisplay = () => {
         let intervalId : Object;
         const func = async () => {
             let debugOption = true;
-            let crap = '0';
+            let crap = '1';
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(crap);
@@ -118,10 +124,10 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome>
+            <Metronome bpm={bpm} setBpm={setBpm}>
             </Metronome>
 
-            <Bar style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
+            <Bar bpm={bpm} style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
                 <View style = {styles.container}> 
                 <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
                     {currentState === '0' ? 'LOW' 
@@ -131,7 +137,7 @@ const StatusDisplay = () => {
                 </Text>
                 </View>
 
-            </Bar> 
+            </Bar>
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session
@@ -193,7 +199,7 @@ const styles = StyleSheet.create({//styles for the app
     },
     noBloodFlow: {
         backgroundColor: '#ff0000',
-        flex: 1,  
+        flex: 1,
     },
     lowBloodFlow: {
         backgroundColor: 'goldenrod',
