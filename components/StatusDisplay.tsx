@@ -1,34 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import Blink from './Blink';
 import Bar from './Bar';
 import Metronome from './Metronome';
-import Sound from 'react-native-sound';
-
-import {
-    SafeAreaView,
-    StyleSheet,
-    View,
-    Text,
-    StatusBar,
-    NativeModules,
-    NativeEventEmitter,
-    Platform,
-    FlatList,
-    TouchableHighlight,
-    Pressable,
-    Alert,
-  } from 'react-native';
-
-import BleManager, {
-    BleDisconnectPeripheralEvent,
-    BleManagerDidUpdateValueForCharacteristicEvent,
-    BleScanCallbackType,
-    BleScanMatchMode,
-    BleScanMode,
-    Peripheral,
-    PeripheralInfo,
-} from 'react-native-ble-manager';
+import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, } from 'react-native';
+import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const StatusDisplay = () => {
@@ -39,6 +14,7 @@ const StatusDisplay = () => {
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
+
     // bpm state is stored in this parent class,
     // passed as props to the child components,
     // metronome and bar both receive the parent bpm in props
@@ -64,7 +40,8 @@ const StatusDisplay = () => {
             if(peripheralData){
                 let curr = await BleManager.read(peripheralData.id, peripheralData.services[0].uuid, peripheralData.characteristics[0].characteristic); //read id, uuid, characteristic
                 console.debug("can read this");
-                let valueAsString = String.fromCharCode(...curr);
+                let valueAsString = String.fromCharCode(...curr); // TODO why is this a string??
+                //let valueAsString = ...curr;
                 setCurrentState(valueAsString);
                 console.debug(valueAsString);
                 setServerID(peripheralData.id);
@@ -74,7 +51,7 @@ const StatusDisplay = () => {
         }
     }
 
-    const getPeripherals = async () => {// seeing which peripherals there are
+    const getPeripherals = async () => { // seeing which peripherals there are
         console.debug('[useEffect] Connected peripheral:');
         const temp = await BleManager.getConnectedPeripherals();
         // console.debug(temp.length);
@@ -96,11 +73,11 @@ const StatusDisplay = () => {
         let intervalId : Object;
         const func = async () => {
             let debugOption = true;
-            let crap = '1';
+            let crap = '1'; // use this to change between (0, 1, 2, 3)
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(crap);
-                }, 500); // should be 100, changed high for debug mode testing
+                }, 500); // this doesn't change the state, its broken
             } else {
                 const periphData = await getPeripherals();
                 console.debug("found periph");
@@ -112,14 +89,41 @@ const StatusDisplay = () => {
 
         };
         func();
-        return () => clearInterval(intervalId); // 
+        return () => clearInterval(intervalId); //TODO why is this here
         }, [ref]
     )
-    
+    //functions for changing UI
+    function getUIStyleState(){
+        var style = currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : 
+        currentState === '2' ? styles.adequateBloodFlow : styles.noConnection;
+
+        return style;
+    }
+    function getUIStyleBar(){
+        var style = currentState === '0' ? styles.barNo : currentState === '1' ? 
+        styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar;
+
+        return style;
+    }
+    function getUIStyleText(){
+        var style = currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ?
+        styles.noConnectionText : styles.statusText;
+
+        return style;
+
+    }
+    function getText(){
+        var text = currentState === '0' ? 'LOW' 
+        : currentState === '1' ? 'OK' 
+        : currentState === '2' ? 'ADEQUATE': 
+        currentState === '3' ? 'no connection...' : 'waiting ...';
+
+        return text;
+    }
 
     return (//returns the UI with the color and text
 
-        <SafeAreaView style={currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : currentState === '2' ? styles.adequateBloodFlow : styles.noConnection}>
+        <SafeAreaView style={getUIStyleState()}>
 
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
@@ -127,17 +131,15 @@ const StatusDisplay = () => {
             <Metronome bpm={bpm} setBpm={setBpm}>
             </Metronome>
 
-            <Bar bpm={bpm} style={currentState === '0' ? styles.barNo : currentState === '1' ? styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar}>
+            <Bar bpm={bpm} style={getUIStyleBar()}>
                 <View style = {styles.container}> 
-                <Text style={currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ? styles.noConnectionText : styles.statusText}>
-                    {currentState === '0' ? 'LOW' 
-                    : currentState === '1' ? 'OK' 
-                    : currentState === '2' ? 'ADEQUATE': 
-                    currentState === '3' ? 'no connection...' : 'waiting ...'}
-                </Text>
+                    <Text style={getUIStyleText()}>
+                        {getText()}
+                    </Text>
                 </View>
 
             </Bar>
+
             <Pressable style={styles.exitButton} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session

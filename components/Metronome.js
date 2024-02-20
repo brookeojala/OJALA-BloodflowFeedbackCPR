@@ -2,6 +2,16 @@ import React, { Component, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
 import tickSoundFile from './metronome.wav'
+/*
+    Metronome.js:
+    Metronome component, bpm variable is passed from parent file via props
+
+    State variables:
+    setBpm: setter function to change the bpm via the props setter
+    isPlaying: boolean for if the metronome is playing
+    ButtonText: text displayed on the metronome
+
+*/
 
 var tickSound = new Sound(tickSoundFile, '', (error) => {
     if (error) {
@@ -15,7 +25,6 @@ function startStop(component) {
 
     if (component.state.ButtonText === 'Start') {
         component.setState({ isPlaying: true });
-        component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Stop' });
         //create rate of tickSound by setting the intervals of pause
         var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
@@ -23,7 +32,6 @@ function startStop(component) {
         component.setState({ soundID: id });
     } else {
         component.setState({ isPlaying: false });
-        component.setState({ timer: 0 });
         component.setState({ ButtonText: 'Start' });
         //reset interval by clearing id
         clearInterval(component.state.soundID);
@@ -62,24 +70,9 @@ export default class Metronome extends Component {
             setBpm: props.setBpm,
             isPlaying: false,
             ButtonText: 'Start',
-            timer: 0,
-            started: false
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
     }
-
-    // tick(deltaT) {
-    //     if (this.state.isPlaying) {
-    //         this.state.timer -= deltaT;
-    //         //this.setState({ timer: this.state.timer - deltaT }); // ms
-    //         if (this.state.timer <= 0) {
-    //             tickSound.play();
-    //             // console.log("played");
-    //             this.state.timer += 60000 / this.props.bpm;
-    //             //this.setState({ timer: this.state.timer + 60000 / this.props.bpm }); // add ms per beat
-    //         }
-    //     }
-    // }
 
     render() {
 
