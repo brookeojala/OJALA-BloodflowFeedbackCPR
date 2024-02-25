@@ -12,7 +12,23 @@ import tickSoundFile from './metronome.wav'
     ButtonText: text displayed on the metronome
 
 */
+// var tickSound = new Sound(tickSoundFile, '', (error) => {
+//     if (error) {
+//         console.log('failed to load the sound', error);
+//         return;
+//     }
+//     // loaded successfully
+//     console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());
 
+//     // Play the sound with an onEnd callback
+//     tickSound.play((success) => {
+//         if (success) {
+//             console.log('successfully finished playing');
+//         } else {
+//             console.log('playback failed due to audio decoding errors');
+//         }
+//     });
+// });
 var tickSound = new Sound(tickSoundFile, '', (error) => {
     if (error) {
         console.log('failed to load the sound', error);
@@ -20,14 +36,15 @@ var tickSound = new Sound(tickSoundFile, '', (error) => {
     }
 });
 
-function startStop(component) {
+async function startStop(component) {
     // console.log('click');
 
     if (component.state.ButtonText === 'Start') {
         component.setState({ isPlaying: true });
         component.setState({ ButtonText: 'Stop' });
         //create rate of tickSound by setting the intervals of pause
-        var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
+        var id = setInterval(() => { tickSound.play() }, ((60000 / component.props.bpm))) //((60000 / component.props.bpm) * 0.035))
+        console.log('tick');
         //interval is stored as id
         component.setState({ soundID: id });
     } else {
@@ -38,7 +55,7 @@ function startStop(component) {
     }
 }
 
-function resetMetronome(component) {
+async function resetMetronome(component) {
     if (component.state.isPlaying) {
         clearInterval(component.state.soundID);
         var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
@@ -68,10 +85,13 @@ export default class Metronome extends Component {
         super(props);
         this.state = {
             setBpm: props.setBpm,
-            isPlaying: false,
-            ButtonText: 'Start',
+            isPlaying: true,
+            ButtonText: 'Stop',
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
+    }
+    componentDidMount() { //this runs when the component is mounted
+        resetMetronome(this); //metronome starts on load-up
     }
 
     render() {
@@ -128,15 +148,12 @@ export default class Metronome extends Component {
 }
 const styles = StyleSheet.create({
     metronome: {
-        //display: 'flex',
-        //flexDirection: 'row',
         textAlign: 'center',
         alignItems: 'center',
         width: 300,
         backgroundColor: 'white',
         marginHorizontal: 40,
         borderRadius: 12,
-        //flexDirection: 'row',
     },
     buttons: {
         //backgroundColor: 'red', // for debug

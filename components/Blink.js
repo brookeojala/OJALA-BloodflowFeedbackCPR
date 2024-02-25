@@ -6,19 +6,19 @@ export default class Blink extends Component {
 
     constructor(props) {
         super(props);
-        this.fadeAnimation = new Animated.Value(0);
+        this.fadeAnimation = new Animated.Value(1);
     }
 
     componentDidMount() {
         Animated.loop(
             Animated.sequence([
                 Animated.timing(this.fadeAnimation, {
-                    toValue: 1,
+                    toValue: 0,
                     duration: this.props.duration,
                     useNativeDriver: true,
                 }),
                 Animated.timing(this.fadeAnimation, {
-                    toValue: 0,
+                    toValue: 1,
                     duration: this.props.duration,
                     useNativeDriver: true,
                 })
@@ -44,6 +44,4 @@ export default class Blink extends Component {
             </View>
         )
     }
-
-    //implementation idea that doesn't work: <Blink duration={currentState === '0' ? 0 : currentState === '1' ? 500 : currentState === '2' ? 1000 : 100}> 
 }

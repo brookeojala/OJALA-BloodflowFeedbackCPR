@@ -10,7 +10,7 @@ import React, { Component } from 'react'
     Animation variables:
     toValue: how many pixels the animation stretches
     duration: how long it takes to stretch
-    useNativeDriver: TODO
+    useNativeDriver: determines if the native code can preform the animation of the UI thread
  */
 export default class Bar extends Component {
     constructor(props) {

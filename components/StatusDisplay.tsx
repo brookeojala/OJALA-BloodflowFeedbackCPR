@@ -5,6 +5,18 @@ import Metronome from './Metronome';
 import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, } from 'react-native';
 import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Blink from './Blink';
+/**
+ * Status Display.tsx 
+ * reads data from a peripheral bluetooth connection
+ * displays the UI with a metronome and a compression animation which are linked together with the bpm param
+ * 
+ * varibles:
+ * currentState: state read from bluetooth device that controlls what version of the UI is displayed (low, med, high, ect)
+ * serverID: name of the connected peripheral
+ * bpm: rate of the metronome and animation (this varible is shared with Metronome and Bar componenets)
+ *
+ */
 
 const StatusDisplay = () => {
     const navigation = useNavigation();
@@ -73,7 +85,7 @@ const StatusDisplay = () => {
         let intervalId : Object;
         const func = async () => {
             let debugOption = true;
-            let crap = '1'; // use this to change between (0, 1, 2, 3)
+            let crap = '2'; // use this to change between (0, 1, 2, 3)
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(crap);
@@ -93,26 +105,13 @@ const StatusDisplay = () => {
         }, [ref]
     )
     //functions for changing UI
-    function getUIStyleState(){
-        var style = currentState === '0' ? styles.noBloodFlow : currentState === '1' ? styles.lowBloodFlow : 
-        currentState === '2' ? styles.adequateBloodFlow : styles.noConnection;
+    
+    function getTextColor(){ // use to change bar text color
+        var color = currentState === 'no connection' ? '696969' : Colors.white;
 
-        return style;
+        return color;
     }
-    function getUIStyleBar(){
-        var style = currentState === '0' ? styles.barNo : currentState === '1' ? 
-        styles.barLow : currentState === '2' ? styles.barAdequate : styles.bar;
-
-        return style;
-    }
-    function getUIStyleText(){
-        var style = currentState === 'no connection' ? styles.noConnectionText : currentState === '3' ?
-        styles.noConnectionText : styles.statusText;
-
-        return style;
-
-    }
-    function getText(){
+    function getText(){ //use to change text in bar
         var text = currentState === '0' ? 'LOW' 
         : currentState === '1' ? 'OK' 
         : currentState === '2' ? 'ADEQUATE': 
@@ -120,27 +119,100 @@ const StatusDisplay = () => {
 
         return text;
     }
-
+    function getRate(){
+        var rate = bpm;
+        return rate;
+    }
+    function getBarColor(){ //use to change bar color
+        var color = currentState === '0' ? 'darkred' : currentState === '1' ? 
+        '#c69035' : currentState === '2' ? '#5cb85c' : '#c0c0c0';
+    
+        return color;
+    }
+    function getBackgroundColor(){ // use to change background color
+        var color = currentState === '0' ? '#ff0000' : currentState === '1' ? 
+        'goldenrod' : currentState === '2' ? 'green' : '#a9a9a9';
+        return color;
+    }
+    const styles = StyleSheet.create({//styles for the app
+        bar: {
+            textAlign: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            bottom: 240,
+            width: 300,
+            backgroundColor: getBarColor(),
+            marginHorizontal: 40,
+            borderRadius: 12,
+        },
+        container: {
+            alignItems: 'center', 
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            //backgroundColor: Colors.red, // for debug
+        },
+        background: {
+            backgroundColor : getBackgroundColor(),
+            flex: 1,
+        },
+        exitText: {
+            fontSize: 25,
+            fontWeight: 'bold',
+        },
+        text: {
+            fontSize: 40,
+            fontWeight: 'bold',
+            letterSpacing: 0.25,
+            color: getTextColor(),
+            position: 'absolute',
+            bottom: 0,
+        },
+        button: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 50,
+            backgroundColor: '#FFFAFA',
+            margin: 20,
+            marginTop: 660,
+            borderRadius: 12,
+            width: 350,
+            position: 'absolute',
+            height: 125,
+            
+        },
+        blinking : {
+            position: 'absolute',
+            bottom: 0,
+            //left: 0,
+            alignItems: 'center'
+        }
+    });
+    
     return (//returns the UI with the color and text
 
-        <SafeAreaView style={getUIStyleState()}>
+        <SafeAreaView style={styles.background}>
 
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome bpm={bpm} setBpm={setBpm}>
+            <Metronome bpm={bpm} setBpm={setBpm}> 
             </Metronome>
 
-            <Bar bpm={bpm} style={getUIStyleBar()}>
+            <Bar bpm={bpm} style={styles.bar} >
                 <View style = {styles.container}> 
-                    <Text style={getUIStyleText()}>
-                        {getText()}
-                    </Text>
+                    
+                        <View style = {styles.container}> 
+                            <Text style={styles.text}>
+                                {getText()}
+                            </Text>
+                        </View>
+                    
                 </View>
 
             </Bar>
 
-            <Pressable style={styles.exitButton} onPress={endSession}>
+            <Pressable style={styles.button} onPress={endSession}>
                 <Text style = {styles.exitText}>
                     End Session
                 </Text>
@@ -149,117 +221,14 @@ const StatusDisplay = () => {
         </SafeAreaView>
     );
 }
+{/* <Blink duration = { (60000 / getRate()) / 2} style={styles.blinking}>
+<View style = {styles.container}> 
+    <Text style={styles.text}>
+        {getText()}
+    </Text>
+</View>
+</Blink> */}
 
-const styles = StyleSheet.create({//styles for the app
-    bar: {
-        textAlign: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 240,
-        width: 300,
-        backgroundColor: '#c0c0c0',
-        marginHorizontal: 40,
-        borderRadius: 12,
-    },
-    container: {
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        //backgroundColor: '000000', for debug
-    },
-    barNo: {
-        textAlign: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 240,
-        width: 300,
-        backgroundColor: 'darkred',
-        marginHorizontal: 40,
-        borderRadius: 12,
-    },
-    barLow: {
-        textAlign: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 240,
-        width: 300,
-        backgroundColor: '#c69035',
-        marginHorizontal: 40,
-        borderRadius: 12,
-    },
-    barAdequate: {
-        textAlign: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 240,
-        width: 300,
-        backgroundColor: 'green',
-        marginHorizontal: 40,
-        borderRadius: 12,
 
-    },
-    noBloodFlow: {
-        backgroundColor: '#ff0000',
-        flex: 1,
-    },
-    lowBloodFlow: {
-        backgroundColor: 'goldenrod',
-        flex: 1,
-    },
-    adequateBloodFlow: {
-        backgroundColor: '#5cb85c',
-        flex: 1,
-    },
-    noConnection: {
-        backgroundColor: '#a9a9a9',
-        flex: 1,
-    },
-    exitText: {
-        fontSize: 25,
-        fontWeight: 'bold',
-    },
-    exitButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 50,
-        backgroundColor: '#FFFAFA',
-        margin: 20,
-        marginTop: 660,
-        borderRadius: 12,
-        width: 350,
-        position: 'absolute',
-        height: 125,
-        
-    },
-    noConnectionText: {
-        fontSize: 30, // i dont think this fits
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: '696969',
-        position: 'absolute',
-        bottom: 0,
-    },
-    statusText : {
-        fontSize: 40,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: Colors.white,
-        position: 'absolute',
-        bottom: 0,
-    },
-    metronome : {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 50,
-        backgroundColor: '#FFFAFA',
-        margin: 20,
-        marginTop: 660,
-        borderRadius: 12,
-        width: 350,
-        position: 'absolute',
-        height: 125,
-    }
-});
 
 export default StatusDisplay;
