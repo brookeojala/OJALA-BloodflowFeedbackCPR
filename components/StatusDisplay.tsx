@@ -107,16 +107,27 @@ const StatusDisplay = () => {
     //functions for changing UI
     
     function getTextColor(){ // use to change bar text color
-        var color = currentState === 'no connection' ? '696969' : Colors.white;
+        var toggle = 'on';
+
+        var color = Colors.white;//returns white if toggle is off
+        if(toggle === 'on'){
+            color = currentState === 'no connection' ? '696969' : Colors.white;
+        }
 
         return color;
     }
     function getText(){ //use to change text in bar
-        var text = currentState === '0' ? 'LOW' 
-        : currentState === '1' ? 'OK' 
-        : currentState === '2' ? 'ADEQUATE': 
-        currentState === '3' ? 'no connection...' : 'waiting ...';
+        var toggle = 'on'; // switch between on and off for the text
 
+        var text = '';// returns blank if toggle is off
+        if(toggle === 'on'){
+            var text = currentState === '0' ? 'LOW' 
+            : currentState === '1' ? 'OK' 
+            : currentState === '2' ? 'ADEQUATE': 
+            currentState === '3' ? 'no connection...' : 'waiting ...';
+    
+        }
+       
         return text;
     }
     function getRate(){
@@ -124,14 +135,28 @@ const StatusDisplay = () => {
         return rate;
     }
     function getBarColor(){ //use to change bar color
-        var color = currentState === '0' ? 'darkred' : currentState === '1' ? 
-        '#c69035' : currentState === '2' ? '#5cb85c' : '#c0c0c0';
-    
+        var toggle = 'on'; //on is for dynamic color, off is for grey, any other input will be transparent
+
+        var color = '#c0c0c000';// if toggle is off, defaults to grey
+        if(toggle === 'off'){
+            color = '#c0c0c0';
+        }
+        if(toggle === 'on'){
+            color = currentState === '0' ? 'darkred' : currentState === '1' ? 
+            '#c69035' : currentState === '2' ? '#5cb85c' : '#c0c0c0';
+        }
+
         return color;
     }
     function getBackgroundColor(){ // use to change background color
-        var color = currentState === '0' ? '#ff0000' : currentState === '1' ? 
-        'goldenrod' : currentState === '2' ? 'green' : '#a9a9a9';
+        var toggle = 'on';
+
+        var color = '#a9a9a9'; // defaults to grey if toggle is off
+        if(toggle === 'on'){
+            color = currentState === '0' ? '#ff0000' : currentState === '1' ? 
+            'goldenrod' : currentState === '2' ? 'green' : '#a9a9a9';
+        }
+
         return color;
     }
     const styles = StyleSheet.create({//styles for the app

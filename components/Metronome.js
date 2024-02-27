@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
 import tickSoundFile from './metronome.wav'
+import { TaskTimer } from 'tasktimer';
 /*
     Metronome.js:
     Metronome component, bpm variable is passed from parent file via props
@@ -12,23 +13,32 @@ import tickSoundFile from './metronome.wav'
     ButtonText: text displayed on the metronome
 
 */
-// var tickSound = new Sound(tickSoundFile, '', (error) => {
-//     if (error) {
-//         console.log('failed to load the sound', error);
-//         return;
-//     }
-//     // loaded successfully
-//     console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());
 
-//     // Play the sound with an onEnd callback
-//     tickSound.play((success) => {
-//         if (success) {
-//             console.log('successfully finished playing');
-//         } else {
-//             console.log('playback failed due to audio decoding errors');
-//         }
-//     });
-// });
+const timer = new TaskTimer(60000 / 110);
+
+timer.on('tick', () => {
+    console.log('tick count: ' + timer.tickCount);
+    //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
+    tickSound.play();
+});
+
+function startStopNew(component) {
+    if (component.state.ButtonText === 'Start') {
+        component.setState({ isPlaying: true });
+        component.setState({ ButtonText: 'Stop' });
+        //set timer
+        timer.interval = ((60000 / component.props.bpm));
+        timer.start();
+        console.log('tick');
+        //interval is stored as id
+        //component.setState({ soundID: id });
+    } else {
+        component.setState({ isPlaying: false });
+        component.setState({ ButtonText: 'Start' });
+        //reset interval by clearing id
+        timer.stop();
+    }
+}
 var tickSound = new Sound(tickSoundFile, '', (error) => {
     if (error) {
         console.log('failed to load the sound', error);
@@ -36,30 +46,36 @@ var tickSound = new Sound(tickSoundFile, '', (error) => {
     }
 });
 
-async function startStop(component) {
-    // console.log('click');
+// async function startStop(component) {
+//     // console.log('click');
 
-    if (component.state.ButtonText === 'Start') {
-        component.setState({ isPlaying: true });
-        component.setState({ ButtonText: 'Stop' });
-        //create rate of tickSound by setting the intervals of pause
-        var id = setInterval(() => { tickSound.play() }, ((60000 / component.props.bpm))) //((60000 / component.props.bpm) * 0.035))
-        console.log('tick');
-        //interval is stored as id
-        component.setState({ soundID: id });
-    } else {
-        component.setState({ isPlaying: false });
-        component.setState({ ButtonText: 'Start' });
-        //reset interval by clearing id
-        clearInterval(component.state.soundID);
-    }
-}
+//     if (component.state.ButtonText === 'Start') {
+//         component.setState({ isPlaying: true });
+//         component.setState({ ButtonText: 'Stop' });
+//         //create rate of tickSound by setting the intervals of pause
+//         var id = setInterval(() => { tickSound.play() }, ((60000 / component.props.bpm))) //((60000 / component.props.bpm) * 0.035))
+//         console.log('tick');
+//         //interval is stored as id
+//         component.setState({ soundID: id });
+//     } else {
+//         component.setState({ isPlaying: false });
+//         component.setState({ ButtonText: 'Start' });
+//         //reset interval by clearing id
+//         clearInterval(component.state.soundID);
+//     }
+// }
 
 async function resetMetronome(component) {
+    // if (component.state.isPlaying) {
+    //     clearInterval(component.state.soundID);
+    //     var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
+    //     component.setState({ soundID: id });
+    // }
     if (component.state.isPlaying) {
-        clearInterval(component.state.soundID);
-        var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
-        component.setState({ soundID: id });
+
+        timer.interval = ((60000 / component.props.bpm));
+        timer.start();
+        // component.setState({ soundID: id });
     }
 }
 
@@ -120,7 +136,7 @@ export default class Metronome extends Component {
 
                     <Pressable onPress={() => {
                         console.log('start/stop button clicked');
-                        return startStop(this);
+                        return startStopNew(this);
                     }}
                         style={styles.buttons}>
 
