@@ -6,6 +6,7 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, } from 'react-na
 import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
+import { TaskTimer } from 'tasktimer';
 /**
  * Status Display.tsx 
  * reads data from a peripheral bluetooth connection
@@ -26,6 +27,8 @@ const StatusDisplay = () => {
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
+
+    const timer = new TaskTimer(60000 / 110);
 
     // bpm state is stored in this parent class,
     // passed as props to the child components,
@@ -80,8 +83,22 @@ const StatusDisplay = () => {
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
     }
 
+    // function setUI(setting: number){ // this was an idea of how to switch the UI with test code
+    //     if(setting === 0){
+    //         getTextColor('on');
+    //         getBarColor('on');
+    //         getBackgroundColor('on');
+    //         getText('on');
+    //     }
+    // }
+
     React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
+        // const UIsetting = () => { // this runs when loaded, it can be used to change the UI look // this was a testing idea
+        //     setUI(1);
+        // }
+        // UIsetting();
+
         let intervalId : Object;
         const func = async () => {
             let debugOption = true;
@@ -103,6 +120,7 @@ const StatusDisplay = () => {
         func();
         return () => clearInterval(intervalId); //TODO why is this here
         }, [ref]
+
     )
     //functions for changing UI
     
@@ -221,10 +239,10 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome bpm={bpm} setBpm={setBpm}> 
+            <Metronome bpm={bpm} setBpm={setBpm} timer={timer}> 
             </Metronome>
 
-            <Bar bpm={bpm} style={styles.bar} >
+            <Bar bpm={bpm} style={styles.bar} timer={timer}>
                 <View style = {styles.container}> 
                     
                         <View style = {styles.container}> 

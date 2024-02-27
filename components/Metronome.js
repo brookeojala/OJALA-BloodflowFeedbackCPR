@@ -13,6 +13,12 @@ import { TaskTimer } from 'tasktimer';
     ButtonText: text displayed on the metronome
 
 */
+var tickSound = new Sound(tickSoundFile, '', (error) => {
+    if (error) {
+        console.log('failed to load the sound', error);
+        return;
+    }
+});
 
 const timer = new TaskTimer(60000 / 110);
 
@@ -39,13 +45,6 @@ function startStopNew(component) {
         timer.stop();
     }
 }
-var tickSound = new Sound(tickSoundFile, '', (error) => {
-    if (error) {
-        console.log('failed to load the sound', error);
-        return;
-    }
-});
-
 // async function startStop(component) {
 //     // console.log('click');
 
