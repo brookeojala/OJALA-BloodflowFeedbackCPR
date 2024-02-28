@@ -28,7 +28,13 @@ const StatusDisplay = () => {
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
 
-    const timer = new TaskTimer(60000 / 110);
+    const timer = new TaskTimer(60000 / bpm);
+    //timer.start();
+    function resetMetronome(){
+        timer.interval = 60000 / bpm;
+    }
+    
+
 
     // bpm state is stored in this parent class,
     // passed as props to the child components,
@@ -94,10 +100,6 @@ const StatusDisplay = () => {
 
     React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
-        // const UIsetting = () => { // this runs when loaded, it can be used to change the UI look // this was a testing idea
-        //     setUI(1);
-        // }
-        // UIsetting();
 
         let intervalId : Object;
         const func = async () => {
@@ -123,9 +125,34 @@ const StatusDisplay = () => {
 
     )
     //functions for changing UI
+    function getUIStyles(type){ //on off switch for styles
+        var funcSwitch = 'on'; //on 
+        if (funcSwitch === 'on'){
+            return 'on';
+        }
+        if (funcSwitch === 'off'){
+            return 'off';
+        }
+        if (funcSwitch === '1'){
+            if(type === 'color'){
+                return 'on';
+            }
+            if(type === 'text'){
+                return 'off';
+            }
+            if(type === 'bgColor'){
+                return 'off';
+            }
+            if(type === 'barColor'){
+                return 'off';
+            }
+        }
+
+        return funcSwitch;
+    }
     
     function getTextColor(){ // use to change bar text color
-        var toggle = 'on';
+        var toggle = getUIStyles('color');
 
         var color = Colors.white;//returns white if toggle is off
         if(toggle === 'on'){
@@ -135,7 +162,7 @@ const StatusDisplay = () => {
         return color;
     }
     function getText(){ //use to change text in bar
-        var toggle = 'on'; // switch between on and off for the text
+        var toggle = getUIStyles('text'); // switch between on and off for the text
 
         var text = '';// returns blank if toggle is off
         if(toggle === 'on'){
@@ -153,7 +180,7 @@ const StatusDisplay = () => {
         return rate;
     }
     function getBarColor(){ //use to change bar color
-        var toggle = 'on'; //on is for dynamic color, off is for grey, any other input will be transparent
+        var toggle = getUIStyles('barColor'); //on is for dynamic color, off is for grey, any other input will be transparent
 
         var color = '#c0c0c000';// if toggle is off, defaults to grey
         if(toggle === 'off'){
@@ -167,7 +194,7 @@ const StatusDisplay = () => {
         return color;
     }
     function getBackgroundColor(){ // use to change background color
-        var toggle = 'on';
+        var toggle = getUIStyles('bgColor');
 
         var color = '#a9a9a9'; // defaults to grey if toggle is off
         if(toggle === 'on'){

@@ -20,21 +20,13 @@ var tickSound = new Sound(tickSoundFile, '', (error) => {
     }
 });
 
-const timer = new TaskTimer(60000 / 110);
-
-timer.on('tick', () => {
-    console.log('tick count: ' + timer.tickCount);
-    //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
-    tickSound.play();
-});
-
 function startStopNew(component) {
     if (component.state.ButtonText === 'Start') {
         component.setState({ isPlaying: true });
         component.setState({ ButtonText: 'Stop' });
         //set timer
-        timer.interval = ((60000 / component.props.bpm));
-        timer.start();
+        component.state.timer.interval = ((60000 / component.props.bpm));
+        component.state.timer.start();
         console.log('tick');
         //interval is stored as id
         //component.setState({ soundID: id });
@@ -42,7 +34,7 @@ function startStopNew(component) {
         component.setState({ isPlaying: false });
         component.setState({ ButtonText: 'Start' });
         //reset interval by clearing id
-        timer.stop();
+        component.state.timer.stop();
     }
 }
 // async function startStop(component) {
@@ -64,17 +56,10 @@ function startStopNew(component) {
 //     }
 // }
 
-async function resetMetronome(component) {
-    // if (component.state.isPlaying) {
-    //     clearInterval(component.state.soundID);
-    //     var id = setInterval(() => { tickSound.play() }, 60000 / component.props.bpm);
-    //     component.setState({ soundID: id });
-    // }
+function resetMetronome(component) {
     if (component.state.isPlaying) {
-
-        timer.interval = ((60000 / component.props.bpm));
-        timer.start();
-        // component.setState({ soundID: id });
+        component.state.timer.interval = ((60000 / component.props.bpm));
+        component.state.timer.start();
     }
 }
 
@@ -102,16 +87,21 @@ export default class Metronome extends Component {
             setBpm: props.setBpm,
             isPlaying: true,
             ButtonText: 'Stop',
+            timer: props.timer,
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
+
+        this.state.timer.on('tick', () => {
+            console.log('tick count: ' + this.state.timer.tickCount);
+            //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
+            tickSound.play();
+        });
     }
     componentDidMount() { //this runs when the component is mounted
         resetMetronome(this); //metronome starts on load-up
     }
 
     render() {
-
-
         return (
 
             <View style={styles.metronome}>

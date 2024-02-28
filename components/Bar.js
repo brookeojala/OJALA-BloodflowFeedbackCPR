@@ -14,71 +14,44 @@ import { TaskTimer } from 'tasktimer';
     useNativeDriver: determines if the native code can preform the animation of the UI thread
  */
 
-// function compressAnimation(component) {
-//     Animated.sequence([
-//         Animated.timing(this.stretchAnimation, {
-//             toValue: 240, //placeholder
-//             duration: component.state.animation,
-//             useNativeDriver: false,
-//         }),
-//         Animated.timing(component.state.stretchAnimation, {
-//             toValue: 48,
-//             duration: 30,
-//             useNativeDriver: false,
-//         })
-//     ]).start();
-
-// }
-
 export default class Bar extends Component {
     constructor(props) {
         super(props);
-        this.stretchAnimation = new Animated.Value(240);
+        this.stretchAnimation = new Animated.Value(48);
         var newAnimDuration = (60000 / this.props.bpm) / 2;
 
-        // this.props.timer.on('tick', () => {
-        //     console.log('tick count: ' + timer.tickCount);
-        //     //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
-        //     this.componentDidMount();
-        // });
-        const timer = new TaskTimer(60000 / 110);
+        this.state = {
+            animationDuration: newAnimDuration,//default animationDuration 273
+            timer: props.timer,
+        }
 
-        timer.on('tick', () => {
-            console.log('tick count: ' + timer.tickCount);
+        this.state.timer.on('tick', () => {
+            console.log('tick count: ' + this.state.timer.tickCount);
             //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
             this.componentDidMount();
         });
 
-        this.state = {
-            animationDuration: newAnimDuration,//default animationDuration 273
-            timerUsed: timer,
-        }
-        // this.props.timer.start();
-        timer.start();
     }
 
     updateDuration() {
         var newAnimDuration = (60000.0 / this.props.bpm) / 2.0;
         this.setState({ animationDuration: newAnimDuration });
-        this.state.timerUsed.interval = (60000 / this.props.bpm);
+        this.state.timer.interval = (60000 / this.props.bpm);
 
     }
 
-    // componentDidMount() {
-    //     compressAnimation(this);
-    // }
     componentDidMount() {
 
         Animated.loop(
 
             Animated.sequence([
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 48, //placeholder
+                    toValue: 240, //placeholder
                     duration: this.state.animationDuration,
                     useNativeDriver: false,
                 }),
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 240,
+                    toValue: 48,
                     duration: this.state.animationDuration,
                     useNativeDriver: false,
                 })
