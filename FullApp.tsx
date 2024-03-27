@@ -7,7 +7,7 @@ import StatusDisplay from './components/StatusDisplay';
 
 const Stack = createNativeStackNavigator();
 
-function FullApp() { // full app containing the two screens  // initialRouteName should be Home
+function FullApp() { // full app containing the two screens  // initialRouteName should be Home //changed to StatusDisplay for testing
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='StatusDisplay'>

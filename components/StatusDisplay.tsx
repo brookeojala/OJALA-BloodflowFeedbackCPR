@@ -6,7 +6,7 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, } from 'react-na
 import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
-import { TaskTimer } from 'tasktimer';
+import { Task, TaskTimer } from 'tasktimer';
 /**
  * Status Display.tsx 
  * reads data from a peripheral bluetooth connection
@@ -16,6 +16,8 @@ import { TaskTimer } from 'tasktimer';
  * currentState: state read from bluetooth device that controlls what version of the UI is displayed (low, med, high, ect)
  * serverID: name of the connected peripheral
  * bpm: rate of the metronome and animation (this varible is shared with Metronome and Bar componenets)
+ * timer: a timer that adjusts for system delays so it does not slip out of time, this timer is shared between the children
+ * timer, setTimer: timer that can be reset using the setTimer, this was part of an idea for fixing the page naviagation issue.
  *
  */
 
@@ -28,14 +30,10 @@ const StatusDisplay = () => {
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
 
-    const timer = new TaskTimer(60000 / bpm);
-    //timer.start();
-    function resetMetronome(){
-        timer.interval = 60000 / bpm;
-    }
+    const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
+
+    const [pageFocus, setPageFocus] = React.useState(true);
     
-
-
     // bpm state is stored in this parent class,
     // passed as props to the child components,
     // metronome and bar both receive the parent bpm in props
@@ -84,26 +82,19 @@ const StatusDisplay = () => {
     }
 
     const endSession = async () => {//ends CPR session
+
         await BleManager.disconnect(serverID);
         navigation.navigate('Home');
+
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
     }
-
-    // function setUI(setting: number){ // this was an idea of how to switch the UI with test code
-    //     if(setting === 0){
-    //         getTextColor('on');
-    //         getBarColor('on');
-    //         getBackgroundColor('on');
-    //         getText('on');
-    //     }
-    // }
 
     React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
 
         let intervalId : Object;
         const func = async () => {
-            let debugOption = true;
+            let debugOption = false; //toggle testing mode
             let crap = '2'; // use this to change between (0, 1, 2, 3)
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
@@ -266,7 +257,7 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome bpm={bpm} setBpm={setBpm} timer={timer}> 
+            <Metronome bpm={bpm} setBpm={setBpm} timer={timer} pageFocus = {pageFocus} setPageFocus = {setPageFocus}> 
             </Metronome>
 
             <Bar bpm={bpm} style={styles.bar} timer={timer}>
@@ -282,7 +273,12 @@ const StatusDisplay = () => {
 
             </Bar>
 
-            <Pressable style={styles.button} onPress={endSession}>
+            <Pressable style={styles.button} onPress={() => {
+                        //setTimer(new TaskTimer(60000 / bpm));
+                        // setBpm(110);
+                        setPageFocus(false);
+                        return endSession();
+                    }}>
                 <Text style = {styles.exitText}>
                     End Session
                 </Text>

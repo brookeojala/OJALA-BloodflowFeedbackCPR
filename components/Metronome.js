@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
 import tickSoundFile from './metronome.wav'
@@ -80,6 +80,19 @@ function decreaseBpm(component) {
         resetMetronome(component);
     }
 }
+
+// useEffect((props) => {
+//     //Runs on the first render
+//     //And any time any dependency value changes
+//     focusLost(() => {
+//         if (props.pageFocus === false) {
+//             //this.state.isPlaying = false;
+//             props.timer.stop();
+//         }
+//     });
+
+// }, [props.pageFocus]);
+
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
@@ -88,6 +101,7 @@ export default class Metronome extends Component {
             isPlaying: true,
             ButtonText: 'Stop',
             timer: props.timer,
+            //pageFocus: props.pageFocus,
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
 
@@ -100,7 +114,6 @@ export default class Metronome extends Component {
     componentDidMount() { //this runs when the component is mounted
         resetMetronome(this); //metronome starts on load-up
     }
-
     render() {
         return (
 
