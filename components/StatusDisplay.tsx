@@ -25,7 +25,7 @@ const StatusDisplay = () => {
     const navigation = useNavigation();
     // const {id, name} = 
     //TODO: figure out how to pass params
-    const [currentState, setCurrentState] = React.useState("no connection");
+    const [currentState, setCurrentState] = React.useState('-1');
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
@@ -91,15 +91,21 @@ const StatusDisplay = () => {
 
     React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
-
+        /**
+         * This is where you can turn debug on and off
+         * if debugOption is true, you can manually set the value for the state 
+         * mode will change the state of the app in debug mode
+         */
         let intervalId : Object;
         const func = async () => {
             let debugOption = false; //toggle testing mode
-            let crap = '2'; // use this to change between (0, 1, 2, 3)
+            let mode = 2; // use this to change between (0, 1, 2, 3)
+
+        
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                    debugRefresher(crap);
-                }, 500); // this doesn't change the state, its broken
+                    debugRefresher(mode);
+                }, 100); // this doesn't change the state, its broken
             } else {
                 const periphData = await getPeripherals();
                 console.debug("found periph");
@@ -147,7 +153,7 @@ const StatusDisplay = () => {
 
         var color = Colors.white;//returns white if toggle is off
         if(toggle === 'on'){
-            color = currentState === 'no connection' ? '696969' : Colors.white;
+            color = currentState === '-1' ? '696969' : Colors.white;
         }
 
         return color;
@@ -157,12 +163,13 @@ const StatusDisplay = () => {
 
         var text = '';// returns blank if toggle is off
         if(toggle === 'on'){
-            var text = currentState === '0' ? 'LOW' 
+            var text = currentState === 0 ? 'LOW' 
             : currentState === '1' ? 'OK' 
             : currentState === '2' ? 'ADEQUATE': 
             currentState === '3' ? 'no connection...' : 'waiting ...';
     
         }
+        console.log("text changed");
        
         return text;
     }

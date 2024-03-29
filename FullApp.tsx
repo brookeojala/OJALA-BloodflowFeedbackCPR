@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 function FullApp() { // full app containing the two screens  // initialRouteName should be Home //changed to StatusDisplay for testing
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='StatusDisplay'>
+      <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen options={{ headerShown: false }} name="Home" component={App} />
         <Stack.Screen options={{ headerShown: false }} name="StatusDisplay" component={StatusDisplay} />
       </Stack.Navigator>
