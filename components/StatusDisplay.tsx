@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import Bar from './Bar';
 import Metronome from './Metronome';
-import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, } from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, NativeEventEmitter} from 'react-native';
 import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
@@ -20,8 +20,13 @@ import { Task, TaskTimer } from 'tasktimer';
  * timer, setTimer: timer that can be reset using the setTimer, this was part of an idea for fixing the page naviagation issue.
  *
  */
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
+
 
 const StatusDisplay = () => {
+    const debugToggle = false;
     const navigation = useNavigation();
     // const {id, name} = 
     //TODO: figure out how to pass params
@@ -29,18 +34,50 @@ const StatusDisplay = () => {
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
+    const [isPlaying, setPlaying] = React.useState(true);
 
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
 
     const [pageFocus, setPageFocus] = React.useState(true);
+
     
     // bpm state is stored in this parent class,
     // passed as props to the child components,
     // metronome and bar both receive the parent bpm in props
     // metronome can use setBpm to update the parent state,
     // so that both metronome and bar are using the same bpm
+    //
+    const setupListeners = async (peripheralData : PeripheralInfo) => {
+        for(let characteristic of peripheralData.characteristics){
+            await BleManager.startNotification(peripheralData.id, peripheralData.services[0].uuid, characteristic.characteristic).then(
+            () => {
+                console.debug('Notification started');
+            }
+            ).catch(
+            (e) => {
+                console.debug(`[connectPeripheral][${peripheralData.id}] issue starting new notification: ${e}.`,)
+            }
+            );
+            console.debug('here 1');
+            // addListener, 
+            bleManagerEmitter.addListener(
+            "BleManagerDidUpdateValueForCharacteristic",
+            // this function (below) gets called when the thing updates.
+            // we can replace the constant state refreshes, with setting up a listener like this.
+            // (i'm not sure how easy it is to do in the other file, maybe just move crap over)
+            ({ value, peripheral, characteristic, service }) => {
+                // Convert bytes array to string
+                const data = String.fromCharCode(...value);
+                console.log(`Received ${data} for characteristic ${characteristic}`);
+                //stateRefresher(peripheral);
+                refreshState(peripheral, data);
+            }
+            );
+        }
+    }
 
-    function sleep(ms: number) { // pause program functionality, buffer
+    // pause program functionality, buffer
+    function sleep(ms: number) { 
         return new Promise<void>(resolve => setTimeout(resolve, ms));
     }
 
@@ -51,7 +88,13 @@ const StatusDisplay = () => {
         setCurrentState(newState);
     }
 
-    const stateRefresher = async (peripheralData : PeripheralInfo) => {// takes data from hardwarde and sets the current state
+    const refreshState = (peripheralData : PeripheralInfo, data : string) => {
+        console.debug("New state refresh started");
+        setCurrentState(data);
+    }
+
+    // takes data from hardware and sets the current state
+    const stateRefresher = async (peripheralData : PeripheralInfo) => {
         try {
             console.debug();
             console.debug("state refresh started");
@@ -70,7 +113,8 @@ const StatusDisplay = () => {
         }
     }
 
-    const getPeripherals = async () => { // seeing which peripherals there are
+    // seeing which peripherals there are
+    const getPeripherals = async () => { 
         console.debug('[useEffect] Connected peripheral:');
         const temp = await BleManager.getConnectedPeripherals();
         // console.debug(temp.length);
@@ -83,7 +127,9 @@ const StatusDisplay = () => {
 
     const endSession = async () => {//ends CPR session
 
-        await BleManager.disconnect(serverID);
+        if (!debugToggle) {
+            await BleManager.disconnect(serverID);
+        }
         navigation.navigate('Home');
 
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
@@ -98,26 +144,27 @@ const StatusDisplay = () => {
          */
         let intervalId : Object;
         const func = async () => {
-            let debugOption = false; //toggle testing mode
-            let mode = 2; // use this to change between (0, 1, 2, 3)
-
+            let debugOption = debugToggle; //toggle testing mode
+            let testingMode = '2';
         
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                    debugRefresher(mode);
+                    debugRefresher(testingMode);
                 }, 100); // this doesn't change the state, its broken
             } else {
                 const periphData = await getPeripherals();
                 console.debug("found periph");
-                await sleep(5000);
-                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                    stateRefresher(periphData)
-                }, 100); // should be 100, changed high for debug mode testing
+                await setupListeners(periphData);
+                //await sleep(5000);
+                // intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
+                //     //stateRefresher(periphData)
+                //     //if device disconnected state == '3'
+                // }, 100); // should be 100, changed high for debug mode testing
             }
 
         };
         func();
-        return () => clearInterval(intervalId); //TODO why is this here
+        return () => clearInterval(intervalId); // Clears old setInterval for previous periphData.
         }, [ref]
 
     )
@@ -163,13 +210,12 @@ const StatusDisplay = () => {
 
         var text = '';// returns blank if toggle is off
         if(toggle === 'on'){
-            var text = currentState === 0 ? 'LOW' 
+            var text = currentState === '0' ? 'LOW' 
             : currentState === '1' ? 'OK' 
             : currentState === '2' ? 'ADEQUATE': 
             currentState === '3' ? 'no connection...' : 'waiting ...';
     
         }
-        console.log("text changed");
        
         return text;
     }
@@ -264,7 +310,7 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome bpm={bpm} setBpm={setBpm} timer={timer} pageFocus = {pageFocus} setPageFocus = {setPageFocus}> 
+            <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} pageFocus = {pageFocus} setPageFocus = {setPageFocus}> 
             </Metronome>
 
             <Bar bpm={bpm} style={styles.bar} timer={timer}>
@@ -284,6 +330,7 @@ const StatusDisplay = () => {
                         //setTimer(new TaskTimer(60000 / bpm));
                         // setBpm(110);
                         setPageFocus(false);
+                        timer.stop();
                         return endSession();
                     }}>
                 <Text style = {styles.exitText}>

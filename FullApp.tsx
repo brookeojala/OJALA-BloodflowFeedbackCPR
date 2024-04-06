@@ -6,13 +6,14 @@ import App from './components/App';
 import StatusDisplay from './components/StatusDisplay';
 
 const Stack = createNativeStackNavigator();
+const debugToggle = true;
 
 function FullApp() { // full app containing the two screens  // initialRouteName should be Home //changed to StatusDisplay for testing
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen options={{ headerShown: false }} name="Home" component={App} />
-        <Stack.Screen options={{ headerShown: false }} name="StatusDisplay" component={StatusDisplay} />
+        <Stack.Screen options={{ headerShown: false }} name="StatusDisplay" component={StatusDisplay}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

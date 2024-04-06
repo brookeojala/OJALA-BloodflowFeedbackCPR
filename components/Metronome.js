@@ -106,7 +106,7 @@ export default class Metronome extends Component {
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
 
         this.state.timer.on('tick', () => {
-            console.log('tick count: ' + this.state.timer.tickCount);
+            //console.log('tick count: ' + this.state.timer.tickCount);
             //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
             tickSound.play();
         });

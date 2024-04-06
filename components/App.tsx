@@ -50,6 +50,7 @@ declare module 'react-native-ble-manager' {// part of template, setting up modul
 }
 
 const App = () => {  //state has to be here
+  const debugToggle = false;
   const navigation =  useNavigation(); //navigation: react native library, used to naviagte between pages 
   const [isScanning, setIsScanning] = useState(false); 
 
@@ -66,6 +67,10 @@ const App = () => {  //state has to be here
   };
 
   const startScan = () => { 
+    if (debugToggle) {
+      navigation.navigate('StatusDisplay'); // navigate to second page
+      return;
+    }
     if (!isScanning) { 
       // reset found peripherals before scan
       setPeripherals(new Map<Peripheral['id'], Peripheral>());
@@ -222,6 +227,7 @@ const App = () => {  //state has to be here
               let currValue = await BleManager.read(peripheral.id, peripheralData.services[0].uuid, characteristic.characteristic);
               let valueAsString = String.fromCharCode(...currValue);
               console.debug(`[connectPeripheral][${peripheral.id}] current characteristic: ${characteristic.characteristic}. Value: ${valueAsString}`,);
+//
 
               // console.debug('New changes'); // tells when the value is changed (Not working rn) here
               // console.debug(
@@ -236,14 +242,23 @@ const App = () => {  //state has to be here
               //     console.debug(`[connectPeripheral][${peripheral.id}] issue starting new notification: ${e}.`,)
               //   }
               // );
+              // console.debug('here 1');
+              // // addListener, 
               // bleManagerEmitter.addListener(
               //   "BleManagerDidUpdateValueForCharacteristic",
+              //   // this function (below) gets called when the thing updates.
+              //   // we can replace the constant state refreshes, with setting up a listener like this.
+              //   // (i'm not sure how easy it is to do in the other file, maybe just move crap over)
               //   ({ value, peripheral, characteristic, service }) => {
               //     // Convert bytes array to string
               //     const data = String.fromCharCode(...value);
               //     console.log(`Received ${data} for characteristic ${characteristic}`);
               //   }
               // ); // until here was commented out
+
+              //
+              console.debug('here');
+
               try {
                 console.debug("Peripheral id:");
                 console.debug(peripheral.id);

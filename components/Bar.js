@@ -26,7 +26,7 @@ export default class Bar extends Component {
         }
 
         this.state.timer.on('tick', () => {
-            console.log('tick count: ' + this.state.timer.tickCount);
+            //console.log('tick count: ' + this.state.timer.tickCount);
             //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
             this.componentDidMount();
         });
