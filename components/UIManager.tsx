@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, N
 
 //functions for changing UI
 export function getUIStyles(type){ //on off switch for styles
-    var funcSwitch = 'on'; //on 
+    var funcSwitch = '1'; //on 
     if (funcSwitch === 'on'){
         return 'on';
     }
@@ -18,13 +18,16 @@ export function getUIStyles(type){ //on off switch for styles
             return 'on';
         }
         if(type === 'bgColor'){
-            return 'off';
+            return 'on';
         }
         if(type === 'barColor'){
-            return 'off';
+            return 'on'; // set to clear to remove animation
         }
         if(type === 'sound') {
             return '2';
+        }
+        if(type === 'shape') {
+            return 'oval';
         }
     }
 
@@ -49,12 +52,24 @@ export function getText(currentState){ //use to change text in bar
     if(toggle === 'on'){
         var text = currentState === '0' ? 'LOW' 
         : currentState === '1' ? 'OK' 
-        : currentState === '2' ? 'ADEQUATE': 
+        : currentState === '2' ? 'GOOD': 
         currentState === '3' ? 'no connection...' : 'waiting ...';
 
     }
 
     return text;
+}
+export function getAnimationShape(){
+    var toggle = getUIStyles('shape');
+    let borderRadius = 10;
+
+    if(toggle === 'oval'){
+        borderRadius = 100;
+    }
+    if(toggle === 'rounded'){
+        borderRadius = 50;
+    }
+    return borderRadius;
 }
 
 export function getRate(bpm){
@@ -73,7 +88,6 @@ export function getBarColor(currentState){ //use to change bar color
         color = currentState === '0' ? 'darkred' : currentState === '1' ? 
         '#c69035' : currentState === '2' ? '#5cb85c' : '#c0c0c0';
     }
-
     return color;
 }
 
@@ -99,7 +113,7 @@ export function getStyles(currentState, bpm) {
             width: 300,
             backgroundColor: getBarColor(currentState),
             marginHorizontal: 40,
-            borderRadius: 12,
+            borderRadius: getAnimationShape(),
         },
         container: {
             alignItems: 'center', 
@@ -117,7 +131,7 @@ export function getStyles(currentState, bpm) {
             fontWeight: 'bold',
         },
         text: {
-            fontSize: 40,
+            fontSize: 40, // original 40
             fontWeight: 'bold',
             letterSpacing: 0.25,
             color: getTextColor(currentState),

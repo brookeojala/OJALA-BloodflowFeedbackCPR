@@ -83,7 +83,7 @@ const StatusDisplay = () => {
             );
         }
     }
-    
+
     // pause program functionality, buffer
     function sleep(ms: number) { 
         return new Promise<void>(resolve => setTimeout(resolve, ms));
@@ -192,7 +192,7 @@ const StatusDisplay = () => {
                     
                         <View style = {styles.container}> 
                             <Text style={styles.text}>
-                                {getText()}
+                                {getText(currentState)}
                             </Text>
                         </View>
                     
