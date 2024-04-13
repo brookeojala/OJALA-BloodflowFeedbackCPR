@@ -50,7 +50,10 @@ declare module 'react-native-ble-manager' {// part of template, setting up modul
 }
 
 const App = () => {  //state has to be here
-  const debugToggle = false;
+  //DEBUG TOGGLE vv
+  const debugToggle = true;
+  //DEBUG TOGGLE ^^
+
   const navigation =  useNavigation(); //navigation: react native library, used to naviagte between pages 
   const [isScanning, setIsScanning] = useState(false); 
 

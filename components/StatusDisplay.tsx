@@ -7,6 +7,8 @@ import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
 import { Task, TaskTimer } from 'tasktimer';
+// import Sound from 'react-native-sound';
+// import sound1 from './metronome.wav';
 /**
  * Status Display.tsx 
  * reads data from a peripheral bluetooth connection
@@ -26,7 +28,10 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 
 const StatusDisplay = () => {
-    const debugToggle = false;
+    //DEBUG TOGGLE
+    const debugToggle = true;
+    //DEBUG TOGGLE^^
+
     const navigation = useNavigation();
     // const {id, name} = 
     //TODO: figure out how to pass params
@@ -37,6 +42,7 @@ const StatusDisplay = () => {
     const [isPlaying, setPlaying] = React.useState(true);
 
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
+    const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
     const [pageFocus, setPageFocus] = React.useState(true);
 
@@ -170,7 +176,7 @@ const StatusDisplay = () => {
     )
     //functions for changing UI
     function getUIStyles(type){ //on off switch for styles
-        var funcSwitch = 'on'; //on 
+        var funcSwitch = '1'; //on 
         if (funcSwitch === 'on'){
             return 'on';
         }
@@ -182,7 +188,7 @@ const StatusDisplay = () => {
                 return 'on';
             }
             if(type === 'text'){
-                return 'off';
+                return 'on';
             }
             if(type === 'bgColor'){
                 return 'off';
@@ -190,11 +196,14 @@ const StatusDisplay = () => {
             if(type === 'barColor'){
                 return 'off';
             }
+            if(type === 'sound') {
+                return '2';
+            }
         }
 
         return funcSwitch;
     }
-    
+
     function getTextColor(){ // use to change bar text color
         var toggle = getUIStyles('color');
 
@@ -248,6 +257,7 @@ const StatusDisplay = () => {
 
         return color;
     }
+
     const styles = StyleSheet.create({//styles for the app
         bar: {
             textAlign: 'center',
@@ -302,6 +312,15 @@ const StatusDisplay = () => {
             alignItems: 'center'
         }
     });
+
+    function getSound() {
+        var toggle = getUIStyles('sound');
+        if (toggle === 'on') {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
     
     return (//returns the UI with the color and text
 
@@ -310,7 +329,7 @@ const StatusDisplay = () => {
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
 
-            <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} pageFocus = {pageFocus} setPageFocus = {setPageFocus}> 
+            <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} tickSoundFile={getSound()}> 
             </Metronome>
 
             <Bar bpm={bpm} style={styles.bar} timer={timer}>

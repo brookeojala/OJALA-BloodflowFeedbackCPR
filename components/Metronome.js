@@ -1,7 +1,11 @@
 import React, { Component, useState, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable } from 'react-native';
 import Sound from 'react-native-sound'
-import tickSoundFile from './metronome.wav'
+import sound1Hi from './metronome.wav'
+import sound1Lo from './Perc_MetronomeQuartz_lo.wav'
+import sound2Hi from './Perc_Clackhead_lo.wav'
+import sound2Lo from './Perc_Clackhead_hi.wav';
+
 import { TaskTimer } from 'tasktimer';
 /*
     Metronome.js:
@@ -13,12 +17,33 @@ import { TaskTimer } from 'tasktimer';
     ButtonText: text displayed on the metronome
 
 */
-var tickSound = new Sound(tickSoundFile, '', (error) => {
+// default sound, lives up here for simplicity
+let tickSound = new Sound(sound1Hi, '', (error) => {
     if (error) {
         console.log('failed to load the sound', error);
         return;
     }
 });
+
+
+function setSound(component) {
+    let chosenTickSoundFile = sound1Hi;
+    if ((component.props.tickSoundFile) === 1) {
+        chosenTickSoundFile = sound1Hi;
+        console.log(component.props.tickSoundFile);
+    }
+    if ((component.props.tickSoundFile) === 2) {
+        chosenTickSoundFile = sound1Lo;
+        console.log(component.props.tickSoundFile);
+    }
+
+    tickSound = new Sound(chosenTickSoundFile, '', (error) => {
+        if (error) {
+            console.log('failed to load the sound', error);
+            return;
+        }
+    });
+}
 
 function startStopNew(component) {
     if (component.state.ButtonText === 'Start') {
@@ -28,8 +53,6 @@ function startStopNew(component) {
         component.state.timer.interval = ((60000 / component.props.bpm));
         component.state.timer.start();
         console.log('tick');
-        //interval is stored as id
-        //component.setState({ soundID: id });
     } else {
         component.setState({ isPlaying: false });
         component.setState({ ButtonText: 'Start' });
@@ -37,24 +60,6 @@ function startStopNew(component) {
         component.state.timer.stop();
     }
 }
-// async function startStop(component) {
-//     // console.log('click');
-
-//     if (component.state.ButtonText === 'Start') {
-//         component.setState({ isPlaying: true });
-//         component.setState({ ButtonText: 'Stop' });
-//         //create rate of tickSound by setting the intervals of pause
-//         var id = setInterval(() => { tickSound.play() }, ((60000 / component.props.bpm))) //((60000 / component.props.bpm) * 0.035))
-//         console.log('tick');
-//         //interval is stored as id
-//         component.setState({ soundID: id });
-//     } else {
-//         component.setState({ isPlaying: false });
-//         component.setState({ ButtonText: 'Start' });
-//         //reset interval by clearing id
-//         clearInterval(component.state.soundID);
-//     }
-// }
 
 function resetMetronome(component) {
     if (component.state.isPlaying) {
@@ -81,18 +86,6 @@ function decreaseBpm(component) {
     }
 }
 
-// useEffect((props) => {
-//     //Runs on the first render
-//     //And any time any dependency value changes
-//     focusLost(() => {
-//         if (props.pageFocus === false) {
-//             //this.state.isPlaying = false;
-//             props.timer.stop();
-//         }
-//     });
-
-// }, [props.pageFocus]);
-
 export default class Metronome extends Component {
     constructor(props) {
         super(props);
@@ -101,10 +94,10 @@ export default class Metronome extends Component {
             isPlaying: true,
             ButtonText: 'Stop',
             timer: props.timer,
-            //pageFocus: props.pageFocus,
+            tickSoundFile: props.tickSoundFile,
         }
         Sound.setCategory('Playback', 'default'); //playback and default work for every soundtype
-
+        setSound(this);
         this.state.timer.on('tick', () => {
             //console.log('tick count: ' + this.state.timer.tickCount);
             //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
@@ -114,6 +107,13 @@ export default class Metronome extends Component {
     componentDidMount() { //this runs when the component is mounted
         resetMetronome(this); //metronome starts on load-up
     }
+    componentDidUpdate(prevProps) {
+        if (this.props.tickSoundFile !== prevProps.tickSoundFile) // check if bpm changed, update if changed
+        {
+            setSound(this);
+        }
+    }
+
     render() {
         return (
 
