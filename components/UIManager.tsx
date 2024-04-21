@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, N
 
 //functions for changing UI
 export function getUIStyles(type){ //on off switch for styles
-    var funcSwitch = '1'; //on 
+    var funcSwitch = 'on'; //on 
     if (funcSwitch === 'on'){
         return 'on';
     }
@@ -18,10 +18,10 @@ export function getUIStyles(type){ //on off switch for styles
             return 'on';
         }
         if(type === 'bgColor'){
-            return 'on';
+            return '-1';
         }
         if(type === 'barColor'){
-            return 'on'; // set to clear to remove animation
+            return '-1'; // set to clear to remove animation
         }
         if(type === 'sound') {
             return '2';
@@ -29,7 +29,12 @@ export function getUIStyles(type){ //on off switch for styles
         if(type === 'shape') {
             return 'oval';
         }
+        if(type === 'textSize') {
+            return '1';
+        }
     }
+    
+
 
     return funcSwitch;
 }
@@ -59,6 +64,17 @@ export function getText(currentState){ //use to change text in bar
 
     return text;
 }
+export function getTextSize(){
+    var toggle = getUIStyles('textSize');
+    var size = 40;
+    if(toggle === '1'){
+        size = 55;
+    }
+    if(toggle === '-1'){
+        size = 30;
+    }
+    return size;
+}
 export function getAnimationShape(){
     var toggle = getUIStyles('shape');
     let borderRadius = 10;
@@ -84,10 +100,29 @@ export function getBarColor(currentState){ //use to change bar color
     if(toggle === 'off'){
         color = '#c0c0c0';
     }
+    // if(toggle === 'on'){
+    //     color = currentState === '0' ? '#7f1d1d' : currentState === '1' ? 
+    //     '#713f12' : currentState === '2' ? '#14532d' : '#c0c0c0';
+    // }
+    // if(toggle === '-1'){
+    //     color = currentState === '0' ? '#b91c1c' : currentState === '1' ? 
+    //     '#a16207' : currentState === '2' ? '#15803d' : '#c0c0c0';
+    // }
+    // if(toggle === 'test'){
+    //     color = currentState === '0' ? '#dc2626' : currentState === '1' ? 
+    //     '#ca8a04' : currentState === '2' ? '#16a34a' : '#c0c0c0';
+    // }
+
+    //inverted vv
+
     if(toggle === 'on'){
-        color = currentState === '0' ? 'darkred' : currentState === '1' ? 
-        '#c69035' : currentState === '2' ? '#5cb85c' : '#c0c0c0';
+        color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
+        '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
+    }if(toggle === '-1'){
+        color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
+        '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
     }
+    
     return color;
 }
 
@@ -95,9 +130,22 @@ export function getBackgroundColor(currentState){ // use to change background co
     var toggle = getUIStyles('bgColor');
 
     var color = '#a9a9a9'; // defaults to grey if toggle is off
+    // if(toggle === 'on'){
+    //     color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
+    //     '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
+    // }if(toggle === '-1'){
+    //     color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
+    //     '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
+    // }
+    /// inverted vv
+
     if(toggle === 'on'){
-        color = currentState === '0' ? '#ff0000' : currentState === '1' ? 
-        'goldenrod' : currentState === '2' ? 'green' : '#a9a9a9';
+        color = currentState === '0' ? '#7f1d1d' : currentState === '1' ? 
+        '#a16207': currentState === '2' ? '#14532d' : '#c0c0c0';
+    }
+    if(toggle === '-1'){
+        color = currentState === '0' ? '#b91c1c' : currentState === '1' ? 
+        '#e69900' : currentState === '2' ? '#15803d' : '#c0c0c0';
     }
 
     return color;
@@ -131,7 +179,7 @@ export function getStyles(currentState, bpm) {
             fontWeight: 'bold',
         },
         text: {
-            fontSize: 40, // original 40
+            fontSize: getTextSize(), // original 40
             fontWeight: 'bold',
             letterSpacing: 0.25,
             color: getTextColor(currentState),

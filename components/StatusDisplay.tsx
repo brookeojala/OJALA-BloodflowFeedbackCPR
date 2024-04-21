@@ -153,7 +153,7 @@ const StatusDisplay = () => {
         let intervalId : Object;
         const func = async () => {
             let debugOption = debugToggle; //toggle testing mode
-            let testingMode = '2';
+            let testingMode = '1';
         
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
