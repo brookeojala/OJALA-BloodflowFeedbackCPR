@@ -112,6 +112,7 @@ export default class Metronome extends Component {
         {
             setSound(this);
         }
+
     }
 
     render() {

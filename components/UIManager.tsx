@@ -3,44 +3,270 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, N
 
 //functions for changing UI
 export function getUIStyles(type){ //on off switch for styles
-    var funcSwitch = 'on'; //on 
+    var funcSwitch = '5'; //on 
+
     if (funcSwitch === 'on'){
         return 'on';
     }
     if (funcSwitch === 'off'){
         return 'off';
     }
+    //always on vv
+    if(type === 'textColor'){
+        return 'on';
+    }
+    if(type === 'textSize'){
+        return '1';
+    }
+
+    //full factorial design below:
+    //A - color, B - sound, C - shape, D - textSize
     if (funcSwitch === '1'){
-        if(type === 'color'){
-            return 'on';
+
+        if(type === 'color'){ //A
+            return '1';
         }
-        if(type === 'text'){
-            return 'on';
-        }
-        if(type === 'bgColor'){
+        if(type === 'sound') { //B
             return '-1';
         }
-        if(type === 'barColor'){
-            return '-1'; // set to clear to remove animation
+        if(type === 'shape') { //C
+            return '1';
         }
-        if(type === 'sound') {
-            return '2';
-        }
-        if(type === 'shape') {
-            return 'oval';
-        }
-        if(type === 'textSize') {
+        if(type === 'text') { //D
             return '1';
         }
     }
-    
+    if (funcSwitch === '2'){
 
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '3'){
+
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '4'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '5'){
+
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '6'){
+
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '7'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '8'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '9'){
+
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '10'){
+
+        if(type === 'color' ){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '11'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '12'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '13'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '14'){
+
+        if(type === 'color'){
+            return '1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
+    if (funcSwitch === '15'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '-1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '-1';
+        }
+    }
+    if (funcSwitch === '16'){
+
+        if(type === 'color'){
+            return '-1';
+        }
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
+            return '-1';
+        }
+        if(type === 'text') {
+            return '1';
+        }
+    }
 
     return funcSwitch;
 }
 
 export function getTextColor(currentState){ // use to change bar text color
-    var toggle = getUIStyles('color');
+    var toggle = getUIStyles('textColor');
 
     var color = Colors.white;//returns white if toggle is off
     if(toggle === 'on'){
@@ -54,7 +280,7 @@ export function getText(currentState){ //use to change text in bar
     var toggle = getUIStyles('text'); // switch between on and off for the text
 
     var text = '';// returns blank if toggle is off
-    if(toggle === 'on'){
+    if(toggle === '1'){
         var text = currentState === '0' ? 'LOW' 
         : currentState === '1' ? 'OK' 
         : currentState === '2' ? 'GOOD': 
@@ -64,29 +290,33 @@ export function getText(currentState){ //use to change text in bar
 
     return text;
 }
-export function getTextSize(){
+export function getTextSize(){ //not being used
     var toggle = getUIStyles('textSize');
     var size = 40;
     if(toggle === '1'){
         size = 55;
     }
     if(toggle === '-1'){
-        size = 30;
+        size = 0;
     }
     return size;
 }
-export function getAnimationShape(){
+export function getIsDynamic(){
     var toggle = getUIStyles('shape');
-    let borderRadius = 10;
+    let isDynamic = false;
 
-    if(toggle === 'oval'){
-        borderRadius = 100;
+    if(toggle === '1'){ //dynamic
+        isDynamic = true;
     }
-    if(toggle === 'rounded'){
-        borderRadius = 50;
+    if(toggle === '-1'){ // static
+        isDynamic = false;
     }
-    return borderRadius;
+    return isDynamic;
 }
+// export function getAnimationHeight(){ // in progress
+//     var toggle = getUIStyles('shapeSize');
+//     let animationHeight = 249;
+// }
 
 export function getRate(bpm){
     var rate = bpm;
@@ -94,7 +324,7 @@ export function getRate(bpm){
 }
 
 export function getBarColor(currentState){ //use to change bar color
-    var toggle = getUIStyles('barColor'); //on is for dynamic color, off is for grey, any other input will be transparent
+    var toggle = getUIStyles('color'); //on is for dynamic color, off is for grey, any other input will be transparent
 
     var color = '#c0c0c000';// if toggle is off, defaults to grey
     if(toggle === 'off'){
@@ -115,7 +345,7 @@ export function getBarColor(currentState){ //use to change bar color
 
     //inverted vv
 
-    if(toggle === 'on'){
+    if(toggle === '1' || 'on'){
         color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
         '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
     }if(toggle === '-1'){
@@ -127,7 +357,7 @@ export function getBarColor(currentState){ //use to change bar color
 }
 
 export function getBackgroundColor(currentState){ // use to change background color
-    var toggle = getUIStyles('bgColor');
+    var toggle = getUIStyles('color');
 
     var color = '#a9a9a9'; // defaults to grey if toggle is off
     // if(toggle === 'on'){
@@ -139,7 +369,7 @@ export function getBackgroundColor(currentState){ // use to change background co
     // }
     /// inverted vv
 
-    if(toggle === 'on'){
+    if(toggle === '1' || 'on'){
         color = currentState === '0' ? '#7f1d1d' : currentState === '1' ? 
         '#a16207': currentState === '2' ? '#14532d' : '#c0c0c0';
     }
@@ -150,6 +380,15 @@ export function getBackgroundColor(currentState){ // use to change background co
 
     return color;
 }
+export function getSound() {
+    var toggle = getUIStyles('sound');
+    if (toggle === '1') {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
 
 export function getStyles(currentState, bpm) {
     return StyleSheet.create({//styles for the app
@@ -161,7 +400,7 @@ export function getStyles(currentState, bpm) {
             width: 300,
             backgroundColor: getBarColor(currentState),
             marginHorizontal: 40,
-            borderRadius: getAnimationShape(),
+            borderRadius: 15,
         },
         container: {
             alignItems: 'center', 
@@ -209,12 +448,5 @@ export function getStyles(currentState, bpm) {
 }
 
 
-export function getSound() {
-    var toggle = getUIStyles('sound');
-    if (toggle === 'on') {
-        return 1;
-    } else {
-        return 2;
-    }
-}
+
 

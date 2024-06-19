@@ -18,13 +18,15 @@ export default class Bar extends Component {
     constructor(props) {
         super(props);
         this.stretchAnimation = new Animated.Value(48);
-        var newAnimDuration = (60000 / this.props.bpm) / 2;
-
+        let newAnimDuration = (60000 / this.props.bpm) / 2;
+        //let newToValue = 500; // something wrong with initializing like this
+        // this doesnt actually do anything it just defaults to the given value
         this.state = {
             animationDuration: newAnimDuration,//default animationDuration 273
             timer: props.timer,
+            toValue: 249,
         }
-
+        this.updateToValue();
         this.state.timer.on('tick', () => {
             //console.log('tick count: ' + this.state.timer.tickCount);
             //console.log('elapsed time: ' + timer.time.elapsed + ' ms.');
@@ -39,19 +41,34 @@ export default class Bar extends Component {
         this.state.timer.interval = (60000 / this.props.bpm);
 
     }
+    updateToValue() {
+        let newToValue = 249;
+        if (this.props.isDynamic === true) {
+            if (this.props.currentState === '0') {
+                newToValue = 449;
+            };
+            if (this.props.currentState === '1') {
+                newToValue = 349;
+            };
+            if (this.props.currentState === '2') {
+                newToValue = 249;
+            };
+        }
 
+        this.setState({ toValue: newToValue }); // default to 249 if the state is unknown
+    }
     componentDidMount() {
 
         Animated.loop(
 
             Animated.sequence([
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 240, //placeholder
+                    toValue: this.state.toValue, //placeholder 240 // this needs to change with the level in the dynamic mode
                     duration: this.state.animationDuration,
                     useNativeDriver: false,
                 }),
                 Animated.timing(this.stretchAnimation, {
-                    toValue: 48,
+                    toValue: 57, //48 originally. Aded 9 pixels to help formatting with bigger text
                     duration: this.state.animationDuration,
                     useNativeDriver: false,
                 })
@@ -60,6 +77,7 @@ export default class Bar extends Component {
                 iterations: this.props.repeat_count
             }
         ).start();
+        this.updateToValue();
 
     }
     componentDidUpdate(prevProps) {
@@ -67,6 +85,12 @@ export default class Bar extends Component {
         {
             this.updateDuration();
             this.componentDidMount();
+        }
+        if (this.props.isDynamic !== prevProps.isDynamic) {
+            //check if state changes and change the height of animation
+            this.updateToValue();
+            this.componentDidMount();
+
         }
     }
     render() {

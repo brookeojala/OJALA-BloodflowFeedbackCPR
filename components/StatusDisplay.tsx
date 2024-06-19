@@ -7,7 +7,7 @@ import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
 import { Task, TaskTimer } from 'tasktimer';
-import {getStyles, getUIStyles, getTextColor, getText, getBackgroundColor, getBarColor, getRate, getSound } from './UIManager';
+import {getStyles, getUIStyles, getTextColor, getText, getBackgroundColor, getBarColor, getRate, getSound, getIsDynamic } from './UIManager';
 /**
  * Status Display.tsx 
  * reads data from a peripheral bluetooth connection
@@ -34,7 +34,7 @@ const StatusDisplay = () => {
 
     const navigation = useNavigation();
 
-    const [currentState, setCurrentState] = React.useState('-1');
+    const [currentState, setCurrentState] = React.useState('-1'); // 0 low, 1 med, 2 high
     const [serverID, setServerID] = React.useState('placeholder');
     const [ref, setRef] = React.useState(0);
     const [bpm, setBpm] = React.useState(110);
@@ -45,16 +45,15 @@ const StatusDisplay = () => {
 
     const [pageFocus, setPageFocus] = React.useState(true);
 
-    const styles = getStyles(currentState, bpm);
+    const styles = getStyles(currentState, bpm); // basically the style sheet
 
-
-    
     // bpm state is stored in this parent class,
     // passed as props to the child components,
     // metronome and bar both receive the parent bpm in props
     // metronome can use setBpm to update the parent state,
     // so that both metronome and bar are using the same bpm
     //
+
     const setupListeners = async (peripheralData : PeripheralInfo) => {
         for(let characteristic of peripheralData.characteristics){
             await BleManager.startNotification(peripheralData.id, peripheralData.services[0].uuid, characteristic.characteristic).then(
@@ -153,7 +152,7 @@ const StatusDisplay = () => {
         let intervalId : Object;
         const func = async () => {
             let debugOption = debugToggle; //toggle testing mode
-            let testingMode = '1';
+            let testingMode = '0';
         
             if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
@@ -187,7 +186,7 @@ const StatusDisplay = () => {
             <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} tickSoundFile={getSound()}> 
             </Metronome>
 
-            <Bar bpm={bpm} style={styles.bar} timer={timer}>
+            <Bar bpm={bpm} style={styles.bar} timer={timer} currentState={currentState} isDynamic={getIsDynamic()}>
                 <View style = {styles.container}> 
                     
                         <View style = {styles.container}> 
