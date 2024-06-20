@@ -7,7 +7,7 @@ import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Blink from './Blink';
 import { Task, TaskTimer } from 'tasktimer';
-import {getStyles, getUIStyles, getTextColor, getText, getBackgroundColor, getBarColor, getRate, getSound, getIsDynamic } from './UIManager';
+import {getStyles, getUIStyles, getTextColor, getText, getBackgroundColor, getBarColor, getRate, getSound, getIsDynamic, setFuncSwitchGlobal } from './UIManager';
 /**
  * Status Display.tsx 
  * reads data from a peripheral bluetooth connection
@@ -27,7 +27,8 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const StatusDisplay = () => {
     //DEBUG TOGGLE
-    const debugToggle = true;
+    const debugToggle = true; // true 
+    const experimentToggle = true;
     //DEBUG TOGGLE^^
 
 
@@ -142,6 +143,11 @@ const StatusDisplay = () => {
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
     }
 
+    const controllSwitch = async (newSwitch : string) => {
+    
+        setFuncSwitchGlobal(newSwitch);
+    }
+    
     React.useEffect( () => {// runs on open, constant refresh
         // setPeripherals(new Map<Peripheral['id'], Peripheral>());
         /**
@@ -150,11 +156,25 @@ const StatusDisplay = () => {
          * mode will change the state of the app in debug mode
          */
         let intervalId : Object;
-        const func = async () => {
-            let debugOption = debugToggle; //toggle testing mode
-            let testingMode = '0';
         
-            if (debugOption) {
+        const func = async () => {
+
+            let debugOption = debugToggle; //toggle testing mode
+            let testingMode = '1';
+
+            let newSwitch = '5'; //this work now yay
+            controllSwitch(newSwitch);
+
+            let experimentalMode = '0';
+            //update with functions from experiment.tsx
+            //I think this should be async in the background file
+
+            if(experimentToggle){
+                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
+                    debugRefresher(experimentalMode);
+                }, 100); // this doesn't change the state, its broken
+            }
+            else if (debugOption) {
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(testingMode);
                 }, 100); // this doesn't change the state, its broken

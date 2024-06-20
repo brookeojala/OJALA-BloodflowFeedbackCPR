@@ -1,9 +1,15 @@
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, NativeEventEmitter} from 'react-native';
+import * as React from 'react';
 
-//functions for changing UI
+// const [funcSwitch, setFuncSwitch] = React.useState('on');
+let funcSwitchVar = '3';
+export function setFuncSwitchGlobal(switchNumber : string){
+    funcSwitchVar = switchNumber;
+}
+
 export function getUIStyles(type){ //on off switch for styles
-    var funcSwitch = '5'; //on 
+    let funcSwitch = funcSwitchVar; //on // this needs to be controlled exterally
 
     if (funcSwitch === 'on'){
         return 'on';
