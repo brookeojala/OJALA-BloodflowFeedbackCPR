@@ -162,10 +162,10 @@ const StatusDisplay = () => {
             let debugOption = debugToggle; //toggle testing mode
             let testingMode = '1';
 
-            let newSwitch = '5'; //this work now yay
-            controllSwitch(newSwitch);
+            let UISwitch = '5'; //this work now yay // make this a global variable??
+            controllSwitch(UISwitch);
 
-            let experimentalMode = '0';
+            let experimentalMode = '0'; //make this a global variable????
             //update with functions from experiment.tsx
             //I think this should be async in the background file
 
