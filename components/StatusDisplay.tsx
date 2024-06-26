@@ -28,10 +28,8 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const StatusDisplay = () => {
     //DEBUG TOGGLE
     const debugToggle = true; // true 
-    const experimentToggle = true;
+    const experimentToggle = false;
     //DEBUG TOGGLE^^
-
-
 
     const navigation = useNavigation();
 
@@ -44,7 +42,8 @@ const StatusDisplay = () => {
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
     const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
-    const [pageFocus, setPageFocus] = React.useState(true);
+    const [UIState, setUIState] = React.useState('1');
+    //const [pageFocus, setPageFocus] = React.useState(true);
 
     const styles = getStyles(currentState, bpm); // basically the style sheet
 
@@ -156,25 +155,26 @@ const StatusDisplay = () => {
          * mode will change the state of the app in debug mode
          */
         let intervalId : Object;
+
+        controllSwitch(UIState);
         
         const func = async () => {
 
             let debugOption = debugToggle; //toggle testing mode
             let testingMode = '1';
 
-            let UISwitch = '5'; //this work now yay // make this a global variable??
-            controllSwitch(UISwitch);
+            //let UISwitch = '5'; //this work now yay // make this a global variable??
 
-            let experimentalMode = '0'; //make this a global variable????
+            //let experimentalMode = '0'; //make this a global variable????
             //update with functions from experiment.tsx
             //I think this should be async in the background file
 
             if(experimentToggle){
-                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                    debugRefresher(experimentalMode);
-                }, 100); // this doesn't change the state, its broken
+                //state is set by experimet.tsx
             }
             else if (debugOption) {
+                //TODO: this can be changed to get rid of debugRefresher
+
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(testingMode);
                 }, 100); // this doesn't change the state, its broken
@@ -218,11 +218,11 @@ const StatusDisplay = () => {
                 </View>
 
             </Bar>
-
+            
             <Pressable style={styles.button} onPress={() => {
                         //setTimer(new TaskTimer(60000 / bpm));
                         // setBpm(110);
-                        setPageFocus(false);
+                        //setPageFocus(false);
                         timer.stop();
                         return endSession();
                     }}>
@@ -234,13 +234,6 @@ const StatusDisplay = () => {
         </SafeAreaView>
     );
 }
-{/* <Blink duration = { (60000 / getRate()) / 2} style={styles.blinking}>
-<View style = {styles.container}> 
-    <Text style={styles.text}>
-        {getText()}
-    </Text>
-</View>
-</Blink> */}
 
 
 

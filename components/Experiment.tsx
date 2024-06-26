@@ -3,56 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable 
 import { TaskTimer } from 'tasktimer';
 //import {debugRefresher} from './StatusDisplay';
 
+//TODO: How to make this talk to statusdisplay
+//make experiment an class/object and export to StatusDisplay
 
-//functions go here
-// export function shuffle<T>(array: T[]): T[] { //tsx way to shuffle 
-//     let currentIndex = array.length,  randomIndex;
+// give setters, tell statusdisplay to change based on internal task timer
 
-//     // While there remain elements to shuffle.
-//     while (currentIndex != 0) {
-
-//       // Pick a remaining element.
-//       randomIndex = Math.floor(Math.random() * currentIndex);
-//       currentIndex--;
-
-//       // And swap it with the current element.
-//       [array[currentIndex], array[randomIndex]] = [
-//         array[randomIndex], array[currentIndex]];
-//     }
-
-//     return array;
-// };
-// function randomizedSequence() {
-//     let arr = ['0', '1', '2'];
-//     shuffle(arr);
-//     return arr;
-// }
-// function setStateValue(value) {
-//     //give value to status display
-
-//     //if value changes send a new one
-// }
-// export function runTrial() {
-//     let timer = new TaskTimer(5 * 1000); // 5 sec in milliseconds
-//     let arrPosition = 0;
-//     timer.on('tick', () => {
-//         if (arrPosition === 3) {
-//             //black screen
-//             setStateValue('black');
-//         }
-//         if (arrPosition > 3) {
-//             timer.clear();
-//         }
-//         setStateValue(order[arrPosition]);
-//         arrPosition += 1;
-
-//     });
-//     timer.start();
-
-// }
 const timer = new TaskTimer(1000);
 //the below timer code relies on the fact that the timer will be precise with the delays and the tasks wont get out of alignment and start overlapping
 // this might be a dangerous way to code this,, any other ideas???? I need it to go one task after another...
+
+//one timer that figures out which function to call OR function does different things depending on what tick its on
+
+//this doesnt align proper vvvvvvv
 const task1 = {
     id: 'trial',
     tickDelay: 0,
@@ -83,7 +45,7 @@ let [UISetting, setUISetting] = React.useState(1);
 let [bloodCounter, setBloodCounter] = React.useState(0);
 let randomizedSequence = [1, 0, 2, 1, 1, 0, 2, 2, 1, 2, 1, 0, 2, 2, 0, 0]; // this can change (16/3 = 5 r1)
 
-export function executeRun(){
+export function executeRun(){ //keep in experiment class (no export)
     timer.start();
     //after done end experiment
     
@@ -112,4 +74,12 @@ function executeTrial(){
 
     setBloodCounter(setBloodCounter + 1);
     setUISetting(UISetting + 1);
+}
+//not component make into an object? like task timer
+
+export default class Experiment extends Component {
+    //make task timer that changes UI setting every 5 seconds
+
+    //get variables from status display
+    //get UIState, setUIState // controlling UI setting
 }
