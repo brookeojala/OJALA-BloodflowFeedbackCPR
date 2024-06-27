@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import Bar from './Bar';
 import Metronome from './Metronome';
+import Experiment from './Experiment';
 import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, NativeEventEmitter} from 'react-native';
 import BleManager, { PeripheralInfo} from 'react-native-ble-manager';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -28,7 +29,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const StatusDisplay = () => {
     //DEBUG TOGGLE
     const debugToggle = true; // true 
-    const experimentToggle = false;
+    const experimentToggle = true;
     //DEBUG TOGGLE^^
 
     const navigation = useNavigation();
@@ -230,6 +231,9 @@ const StatusDisplay = () => {
                     End Session
                 </Text>
             </Pressable>
+
+            <Experiment experimentToggle = {experimentToggle} setCurrentState={setCurrentState} currentState = {currentState} setUIState={setUIState} UIState = {UIState}>
+            </Experiment>
 
         </SafeAreaView>
     );
