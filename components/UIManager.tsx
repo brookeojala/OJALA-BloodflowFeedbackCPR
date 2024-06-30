@@ -6,23 +6,45 @@ import * as React from 'react';
 let funcSwitchVar = '3';
 export function setFuncSwitchGlobal(switchNumber : string){
     funcSwitchVar = switchNumber;
+    console.log('made it to global switch');
 }
 
 export function getUIStyles(type){ //on off switch for styles
     let funcSwitch = funcSwitchVar; //on // this needs to be controlled exterally
 
-    if (funcSwitch === 'on'){
-        return 'on';
-    }
-    if (funcSwitch === 'off'){
-        return 'off';
-    }
+    console.log('getUIStyles was run!')
+
+    // if (funcSwitch === 'on'){
+    //     return 'on';
+    // }
+    // if (funcSwitch === 'off'){
+    //     return 'off';
+    // }
+
     //always on vv
-    if(type === 'textColor'){
+    
+
+    if(type === 'textColor' && funcSwitch !== 'black'){
         return 'on';
     }
     if(type === 'textSize'){
         return '1';
+    }
+    if (funcSwitch === 'black'){
+        
+        if(type === 'color'){ //A
+            return 'black';
+        }
+        if(type === 'sound') { //B
+            return 'off';
+        }
+        if(type === 'shape') { //C
+            return '1';
+        }
+        if(type === 'text') { //D
+            return '1';
+        }
+
     }
 
     //full factorial design below:
@@ -278,7 +300,10 @@ export function getTextColor(currentState){ // use to change bar text color
     if(toggle === 'on'){
         color = currentState === '-1' ? '696969' : Colors.white;
     }
-
+    if(toggle === 'black'){
+        color = '#000000';
+    }
+    
     return color;
 }
 
@@ -305,6 +330,7 @@ export function getTextSize(){ //not being used
     if(toggle === '-1'){
         size = 0;
     }
+
     return size;
 }
 export function getIsDynamic(){
@@ -358,6 +384,9 @@ export function getBarColor(currentState){ //use to change bar color
         color = currentState === '0' ? '#ef4444' : currentState === '1' ? 
         '#eab308' : currentState === '2' ? '#22c55e' : '#a9a9a9';
     }
+    if(toggle === 'black'){
+        color = '#000000';
+    }
     
     return color;
 }
@@ -383,6 +412,9 @@ export function getBackgroundColor(currentState){ // use to change background co
         color = currentState === '0' ? '#b91c1c' : currentState === '1' ? 
         '#e69900' : currentState === '2' ? '#15803d' : '#c0c0c0';
     }
+    if(toggle === 'black'){
+        color = '#000000';
+    }
 
     return color;
 }
@@ -390,7 +422,9 @@ export function getSound() {
     var toggle = getUIStyles('sound');
     if (toggle === '1') {
         return 1;
-    } else {
+    }if(toggle === 'off'){
+        return -1;
+    }else {
         return 2;
     }
 }

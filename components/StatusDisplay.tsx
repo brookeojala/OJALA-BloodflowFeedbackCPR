@@ -41,12 +41,15 @@ const StatusDisplay = () => {
     const [isPlaying, setPlaying] = React.useState(true);
 
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
+
+    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(5000));
+
     const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
     const [UIState, setUIState] = React.useState('1');
     //const [pageFocus, setPageFocus] = React.useState(true);
 
-    const styles = getStyles(currentState, bpm); // basically the style sheet
+    let styles = getStyles(currentState, bpm); // basically the style sheet
 
     // bpm state is stored in this parent class,
     // passed as props to the child components,
@@ -138,18 +141,25 @@ const StatusDisplay = () => {
         if (!debugToggle) {
             await BleManager.disconnect(serverID);
         }
+        timer.stop();
+
+        if(experimentToggle){
+            experimentTimer.stop();
+            experimentTimer.reset();
+        }
+
+
         navigation.navigate('Home');
 
         Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
     }
-
-    const controllSwitch = async (newSwitch : string) => {
-    
+    function setSwitch(newSwitch){
         setFuncSwitchGlobal(newSwitch);
+        console.log('UI State changed');
     }
     
-    React.useEffect( () => {// runs on open, constant refresh
-        // setPeripherals(new Map<Peripheral['id'], Peripheral>());
+    
+    React.useEffect( () => {// runs on open, constant refresh (only constant when [] is blank at bottom of pointer function)
         /**
          * This is where you can turn debug on and off
          * if debugOption is true, you can manually set the value for the state 
@@ -157,12 +167,13 @@ const StatusDisplay = () => {
          */
         let intervalId : Object;
 
-        controllSwitch(UIState);
-        
+        setSwitch(UIState);
+
         const func = async () => {
 
             let debugOption = debugToggle; //toggle testing mode
             let testingMode = '1';
+
 
             //let UISwitch = '5'; //this work now yay // make this a global variable??
 
@@ -178,22 +189,19 @@ const StatusDisplay = () => {
 
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(testingMode);
+
+
                 }, 100); // this doesn't change the state, its broken
             } else {
                 const periphData = await getPeripherals();
                 console.debug("found periph");
                 await setupListeners(periphData);
-                //await sleep(5000);
-                // intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                //     //stateRefresher(periphData)
-                //     //if device disconnected state == '3'
-                // }, 100); // should be 100, changed high for debug mode testing
             }
 
         };
         func();
         return () => clearInterval(intervalId); // Clears old setInterval for previous periphData.
-        }, [ref]
+        }, [ref, UIState] // useEffect updates when one of these vars updates // if empty it updates every frame
 
     )
     
@@ -203,6 +211,7 @@ const StatusDisplay = () => {
 
             <Text>Connected device: {serverID}</Text>
             <Text>Current state: {currentState}</Text> 
+            <Text>Current UI state: {UIState}</Text> 
 
             <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} tickSoundFile={getSound()}> 
             </Metronome>
@@ -221,10 +230,8 @@ const StatusDisplay = () => {
             </Bar>
             
             <Pressable style={styles.button} onPress={() => {
-                        //setTimer(new TaskTimer(60000 / bpm));
-                        // setBpm(110);
-                        //setPageFocus(false);
-                        timer.stop();
+                        
+                        //timer.stop();
                         return endSession();
                     }}>
                 <Text style = {styles.exitText}>
@@ -232,7 +239,7 @@ const StatusDisplay = () => {
                 </Text>
             </Pressable>
 
-            <Experiment experimentToggle = {experimentToggle} setCurrentState={setCurrentState} currentState = {currentState} setUIState={setUIState} UIState = {UIState}>
+            <Experiment experimentToggle = {experimentToggle} setCurrentState={setCurrentState} setUIState={setUIState} endSession={endSession} experimentTimer={experimentTimer}>
             </Experiment>
 
         </SafeAreaView>

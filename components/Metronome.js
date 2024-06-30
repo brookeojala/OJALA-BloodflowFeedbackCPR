@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, Pressable 
 import Sound from 'react-native-sound'
 import sound1Hi from './metronome.wav'
 import sound1Lo from './Perc_MetronomeQuartz_lo.wav'
+import silent from './2-seconds-of-silence.mp3'
 import sound2Hi from './Perc_Clackhead_lo.wav'
 import sound2Lo from './Perc_Clackhead_hi.wav';
 
@@ -30,11 +31,15 @@ function setSound(component) {
     let chosenTickSoundFile = sound1Hi;
     if ((component.props.tickSoundFile) === 1) {
         chosenTickSoundFile = sound1Hi;
-        console.log(component.props.tickSoundFile);
+        console.log('sound file: ' + component.props.tickSoundFile);
     }
     if ((component.props.tickSoundFile) === 2) {
         chosenTickSoundFile = sound1Lo;
-        console.log(component.props.tickSoundFile);
+        console.log('sound file: ' + component.props.tickSoundFile);
+    }
+    if ((component.props.tickSoundFile) === -1) {
+        chosenTickSoundFile = silent;
+        console.log('sound file: ' + component.props.tickSoundFile);
     }
 
     tickSound = new Sound(chosenTickSoundFile, '', (error) => {
