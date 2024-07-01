@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, View, Text, Pressable, Alert, NativeModules, N
 import * as React from 'react';
 
 // const [funcSwitch, setFuncSwitch] = React.useState('on');
-let funcSwitchVar = '3';
+let funcSwitchVar = '1';
 export function setFuncSwitchGlobal(switchNumber : string){
     funcSwitchVar = switchNumber;
     console.log('made it to global switch');
@@ -12,7 +12,7 @@ export function setFuncSwitchGlobal(switchNumber : string){
 export function getUIStyles(type){ //on off switch for styles
     let funcSwitch = funcSwitchVar; //on // this needs to be controlled exterally
 
-    console.log('getUIStyles was run!')
+    //console.log('getUIStyles was run!')
 
     // if (funcSwitch === 'on'){
     //     return 'on';

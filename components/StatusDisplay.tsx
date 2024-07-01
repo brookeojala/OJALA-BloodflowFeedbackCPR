@@ -28,7 +28,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const StatusDisplay = () => {
     //DEBUG TOGGLE
-    const debugToggle = true; // true 
+    const debugToggle = false; // true 
     const experimentToggle = true;
     //DEBUG TOGGLE^^
 
@@ -40,16 +40,17 @@ const StatusDisplay = () => {
     const [bpm, setBpm] = React.useState(110);
     const [isPlaying, setPlaying] = React.useState(true);
 
-    const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm));
+    const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm)); //metronome timer
 
-    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(5000));
+    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(5000)); //experiment timer
 
     const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
     const [UIState, setUIState] = React.useState('1');
     //const [pageFocus, setPageFocus] = React.useState(true);
+    const [styles, setStyles] = React.useState(getStyles(currentState, bpm));
 
-    let styles = getStyles(currentState, bpm); // basically the style sheet
+    //let styles = getStyles(currentState, bpm); // basically the style sheet
 
     // bpm state is stored in this parent class,
     // passed as props to the child components,
@@ -138,7 +139,7 @@ const StatusDisplay = () => {
 
     const endSession = async () => {//ends CPR session
 
-        if (!debugToggle) {
+        if (!debugToggle && !experimentToggle) {
             await BleManager.disconnect(serverID);
         }
         timer.stop();
@@ -166,13 +167,15 @@ const StatusDisplay = () => {
          * mode will change the state of the app in debug mode
          */
         let intervalId : Object;
-
+        
         setSwitch(UIState);
+        setStyles(getStyles(currentState, bpm));
+
 
         const func = async () => {
 
             let debugOption = debugToggle; //toggle testing mode
-            let testingMode = '1';
+            let testingMode = '0';
 
 
             //let UISwitch = '5'; //this work now yay // make this a global variable??
@@ -186,6 +189,7 @@ const StatusDisplay = () => {
             }
             else if (debugOption) {
                 //TODO: this can be changed to get rid of debugRefresher
+                //debugRefresher(testingMode);
 
                 intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
                     debugRefresher(testingMode);

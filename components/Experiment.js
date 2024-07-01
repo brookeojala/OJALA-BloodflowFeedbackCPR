@@ -50,7 +50,7 @@ export default class Experiment extends Component {
     sequencePosition = 0;
 
     showScreen(timer) {
-        if (timer.tickCount > 8) { // should be 16
+        if (timer.tickCount > 33) { // should be 16
             //stop experiment
             //timer.stop();
             //timer.reset();
@@ -59,15 +59,16 @@ export default class Experiment extends Component {
             this.props.endSession();
             //set to finish screen
         }
-        else if (timer.tickCount % 2 == 0) {
-            this.props.setUIState('black');
+        else if (timer.tickCount % 2 != 0) {
             this.props.setCurrentState('1');
+            this.props.setUIState('black');
             console.log('tick count:' + timer.tickCount);
             console.log('black screen');
         }
-        else if (timer.tickCount % 2 != 0) {
-            this.props.setUIState(this.UISequence[this.sequencePosition]);
+        else if (timer.tickCount % 2 == 0) {
+            //the order of this matters!! Current state needs to be correct before switch is changed (style sheet reload)
             this.props.setCurrentState(this.bloodFlowSequence[this.sequencePosition]);
+            this.props.setUIState(this.UISequence[this.sequencePosition]);
             console.log('tick count:' + timer.tickCount);
             console.log('blood flow level: ' + this.bloodFlowSequence[this.sequencePosition] + ' UI sequence ' + this.UISequence[this.sequencePosition]);
             this.sequencePosition += 1;
