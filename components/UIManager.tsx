@@ -39,10 +39,10 @@ export function getUIStyles(type){ //on off switch for styles
             return 'off';
         }
         if(type === 'shape') { //C
-            return '1';
+            return '-1';
         }
         if(type === 'text') { //D
-            return '1';
+            return '-1';
         }
 
     }

@@ -37,7 +37,8 @@ export default class Bar extends Component {
 
     updateDuration() {
         var newAnimDuration = (60000.0 / this.props.bpm) / 2.0;
-        this.setState({ animationDuration: newAnimDuration });
+        //this.setState({ animationDuration: newAnimDuration });
+        this.state.animationDuration = newAnimDuration;
         this.state.timer.interval = (60000 / this.props.bpm);
 
     }
@@ -45,7 +46,7 @@ export default class Bar extends Component {
         let newToValue = 249;
         if (this.props.isDynamic === true) {
             if (this.props.currentState === '0') {
-                newToValue = 449;
+                newToValue = 446; // removed 3 pixels so it doesnt run into other component
             };
             if (this.props.currentState === '1') {
                 newToValue = 349;
@@ -55,7 +56,7 @@ export default class Bar extends Component {
             };
         }
 
-        this.setState({ toValue: newToValue }); // default to 249 if the state is unknown
+        this.state.toValue = newToValue; // default to 249 if the state is unknown
     }
     componentDidMount() {
 
@@ -74,22 +75,23 @@ export default class Bar extends Component {
                 })
             ]),
             {
-                iterations: this.props.repeat_count
+                iterations: -1
             }
         ).start();
-        this.updateToValue();
 
     }
+
     componentDidUpdate(prevProps) {
         if ((this.props.bpm !== prevProps.bpm)) // check if bpm changed, update if changed
         {
             this.updateDuration();
-            this.componentDidMount();
+            this.componentDidMount(); //this will still update without this but it will be on a slight delay
         }
         if (this.props.isDynamic !== prevProps.isDynamic) {
             //check if state changes and change the height of animation
             this.updateToValue();
-            this.componentDidMount();
+            //because state it changed in updateToValue, it automatically rerenders.
+            //when forced to re-render it has  a bad jitter.
 
         }
     }

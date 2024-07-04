@@ -30,6 +30,7 @@ const StatusDisplay = () => {
     //DEBUG TOGGLE
     const debugToggle = false; // true 
     const experimentToggle = true;
+    const demoToggle = false;
     //DEBUG TOGGLE^^
 
     const navigation = useNavigation();
@@ -42,7 +43,7 @@ const StatusDisplay = () => {
 
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm)); //metronome timer
 
-    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(5000)); //experiment timer
+    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(1000)); //experiment timer
 
     const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
@@ -152,7 +153,14 @@ const StatusDisplay = () => {
 
         navigation.navigate('Home');
 
-        Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR Feedback Device.');
+        if(experimentToggle){
+            Alert.alert('Testing Session Ended.', 'Thank you for participating!');
+
+        }else{
+            Alert.alert('CPR Session Ended', 'You have been disconnected from your CPR feedback device.');
+        }
+
+
     }
     function setSwitch(newSwitch){
         setFuncSwitchGlobal(newSwitch);
@@ -175,7 +183,7 @@ const StatusDisplay = () => {
         const func = async () => {
 
             let debugOption = debugToggle; //toggle testing mode
-            let testingMode = '0';
+            let testingMode = '1';
 
 
             //let UISwitch = '5'; //this work now yay // make this a global variable??
@@ -220,7 +228,7 @@ const StatusDisplay = () => {
             <Metronome bpm={bpm} setBpm={setBpm} timer={timer} isPlaying={isPlaying} setIsPlaying={setPlaying} tickSoundFile={getSound()}> 
             </Metronome>
 
-            <Bar bpm={bpm} style={styles.bar} timer={timer} currentState={currentState} isDynamic={getIsDynamic()}>
+            <Bar bpm={bpm} style={styles.bar} timer={timer} currentState={currentState} isDynamic={getIsDynamic()} UIState={UIState}>
                 <View style = {styles.container}> 
                     
                         <View style = {styles.container}> 
@@ -243,7 +251,7 @@ const StatusDisplay = () => {
                 </Text>
             </Pressable>
 
-            <Experiment experimentToggle = {experimentToggle} setCurrentState={setCurrentState} setUIState={setUIState} endSession={endSession} experimentTimer={experimentTimer}>
+<Experiment experimentToggle={experimentToggle} setCurrentState={setCurrentState} setUIState={setUIState} endSession={endSession} experimentTimer={experimentTimer} demoToggle={demoToggle}>
             </Experiment>
 
         </SafeAreaView>

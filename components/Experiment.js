@@ -48,35 +48,72 @@ export default class Experiment extends Component {
     bloodFlowSequence = ['1', '0', '2', '1', '1', '0', '2', '2', '1', '2', '1', '0', '2', '2', '0', '0']; // this can change (16/3 = 5 r1)
     UISequence = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
     sequencePosition = 0;
+    completedRuns = 1;
+    ticksRan = 0;
 
     showScreen(timer) {
-        if (timer.tickCount > 33) { // should be 16
+        numberOfRuns = 33;
+
+
+        if (this.props.demoToggle) {
+            numberOfRuns = 7;
+            this.bloodFlowSequence = ['2', '0', '1', '0', '2', '1'];
+            this.UISequence = ['3', '15', '7', '2', '9'];
+        }
+        if (this.completedRuns > numberOfRuns) { // should be 16
             //stop experiment
             //timer.stop();
             //timer.reset();
             console.log('done');
             sequencePosition = 0;
+            this.completedRuns = 1;
             this.props.endSession();
             //set to finish screen
         }
-        else if (timer.tickCount % 2 != 0) {
-            this.props.setCurrentState('1');
-            this.props.setUIState('black');
+        else if (this.completedRuns % 2 != 0) {
+            // for 3 ticks before moving on
+            durationOfBlack = 3;
+            if (this.ticksRan === 0) {
+                this.props.setCurrentState('1');
+                this.props.setUIState('black');
+                console.log('black screen');
+                this.ticksRan += 1;
+            } else if (this.ticksRan < (durationOfBlack - 1)) {
+                this.ticksRan += 1;
+            } else {
+                this.completedRuns += 1;
+                console.log('run completed for a total of ' + this.compeletedRuns);
+                this.ticksRan = 0;
+            }
             console.log('tick count:' + timer.tickCount);
-            console.log('black screen');
+
+
         }
-        else if (timer.tickCount % 2 == 0) {
+        else if (this.completedRuns % 2 === 0) {
+            //for 6 ticks before moving on
+            durationOn = 6;
             //the order of this matters!! Current state needs to be correct before switch is changed (style sheet reload)
-            this.props.setCurrentState(this.bloodFlowSequence[this.sequencePosition]);
-            this.props.setUIState(this.UISequence[this.sequencePosition]);
-            console.log('tick count:' + timer.tickCount);
-            console.log('blood flow level: ' + this.bloodFlowSequence[this.sequencePosition] + ' UI sequence ' + this.UISequence[this.sequencePosition]);
-            this.sequencePosition += 1;
+            if (this.ticksRan === 0) {
+                this.props.setCurrentState(this.bloodFlowSequence[this.sequencePosition]);
+                this.props.setUIState(this.UISequence[this.sequencePosition]);
+                console.log('tick count:' + timer.tickCount);
+                console.log('blood flow level: ' + this.bloodFlowSequence[this.sequencePosition] + ' UI sequence ' + this.UISequence[this.sequencePosition]);
+                this.ticksRan += 1;
+            } else if (this.ticksRan < (durationOn - 1)) {
+                this.ticksRan += 1;
+            } else {
+                this.completedRuns += 1;
+                this.sequencePosition += 1;
+                this.ticksRan = 0;
+            }
+
         }
 
         else {
             //this.props.setCurrentState('off');
             console.log('Error, out of bounds of timer'); // it is logging everything after 1
+            console.log('completed runs is:' + this.compeletedRuns);
+
 
         }
 
