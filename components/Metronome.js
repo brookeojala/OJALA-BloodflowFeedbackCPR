@@ -122,50 +122,51 @@ export default class Metronome extends Component {
 
     render() {
         return (
+            null // if testing mode return null, otherwise uncomment below:
 
-            <View style={styles.metronome}>
-                <View>
-                    <Text style={styles.metronomeText}>
-                        {this.props.bpm} BPM
-                    </Text>
+            // <View style={styles.metronome}>
+            //     <View>
+            //         <Text style={styles.metronomeText}>
+            //             {this.props.bpm} BPM
+            //         </Text>
 
-                </View>
-                <View style={styles.selector}>
-                    <Pressable onPress={() => {
-                        console.log(' - button clicked');
-                        return decreaseBpm(this);
-                    }} style={styles.buttons}>
+            //     </View>
+            //     <View style={styles.selector}>
+            //         <Pressable onPress={() => {
+            //             console.log(' - button clicked');
+            //             return decreaseBpm(this);
+            //         }} style={styles.buttons}>
 
-                        <Text style={styles.plusMinus}>
-                            -
-                        </Text>
+            //             <Text style={styles.plusMinus}>
+            //                 -
+            //             </Text>
 
-                    </Pressable>
+            //         </Pressable>
 
-                    <Pressable onPress={() => {
-                        console.log('start/stop button clicked');
-                        return startStopNew(this);
-                    }}
-                        style={styles.buttons}>
+            //         <Pressable onPress={() => {
+            //             console.log('start/stop button clicked');
+            //             return startStopNew(this);
+            //         }}
+            //             style={styles.buttons}>
 
-                        <Text style={styles.metronomeText}>
-                            {this.state.ButtonText}
-                        </Text>
-                    </Pressable>
+            //             <Text style={styles.metronomeText}>
+            //                 {this.state.ButtonText}
+            //             </Text>
+            //         </Pressable>
 
-                    <Pressable onPress={() => {
-                        console.log('+ button clicked');
-                        return increaseBpm(this);
-                    }} style={styles.buttons}>
+            //         <Pressable onPress={() => {
+            //             console.log('+ button clicked');
+            //             return increaseBpm(this);
+            //         }} style={styles.buttons}>
 
-                        <Text style={styles.plusMinus}>
-                            +
-                        </Text>
+            //             <Text style={styles.plusMinus}>
+            //                 +
+            //             </Text>
 
-                    </Pressable>
-                </View>
+            //         </Pressable>
+            //     </View>
 
-            </View>
+            // </View>
 
         )
     }

@@ -43,7 +43,8 @@ const StatusDisplay = () => {
 
     const [timer, setTimer] = React.useState(new TaskTimer(60000 / bpm)); //metronome timer
 
-    const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(1000)); //experiment timer
+
+    //const [experimentTimer, setExperiementTimer] = React.useState(new TaskTimer(1000)); //experiment timer
 
     const [tickSoundFile, setTickSoundFile] = React.useState(2);
 
@@ -197,13 +198,13 @@ const StatusDisplay = () => {
             }
             else if (debugOption) {
                 //TODO: this can be changed to get rid of debugRefresher
-                //debugRefresher(testingMode);
+                debugRefresher(testingMode);
 
-                intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
-                    debugRefresher(testingMode);
+                // intervalId = setInterval(() => { // start a loop that runs every 100ms, refresh states
+                //     debugRefresher(testingMode);
 
 
-                }, 100); // this doesn't change the state, its broken
+                // }, 100); // this doesn't change the state, its broken
             } else {
                 const periphData = await getPeripherals();
                 console.debug("found periph");
@@ -241,7 +242,7 @@ const StatusDisplay = () => {
 
             </Bar>
             
-            <Pressable style={styles.button} onPress={() => {
+            {/* <Pressable style={styles.button} onPress={() => {
                         
                         //timer.stop();
                         return endSession();
@@ -249,7 +250,7 @@ const StatusDisplay = () => {
                 <Text style = {styles.exitText}>
                     End Session
                 </Text>
-            </Pressable>
+            </Pressable> */}
 
 <Experiment experimentToggle={experimentToggle} setCurrentState={setCurrentState} setUIState={setUIState} endSession={endSession} experimentTimer={experimentTimer} demoToggle={demoToggle}>
             </Experiment>
