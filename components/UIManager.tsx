@@ -8,7 +8,7 @@ export function setFuncSwitchGlobal(switchNumber : string){
     funcSwitchVar = switchNumber;
     //console.log('made it to global switch');
 }
-
+//test
 export function getUIStyles(type){ //on off switch for styles
     let funcSwitch = funcSwitchVar; //on // this needs to be controlled exterally
 
@@ -59,19 +59,16 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'shape') { //C
-            return '1';
+            return '-1';
         }
         if(type === 'text') { //D
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
+            return '-1';
         }
     }
     if (funcSwitch === '2'){
 
         if(type === 'color'){
-            return '1';
+            return '-1';
         }
         if(type === 'sound') {
             return '-1';
@@ -81,15 +78,12 @@ export function getUIStyles(type){ //on off switch for styles
         }
         if(type === 'text') {
             return '1';
-        }
-        if(type === 'position'){
-            return '-1';
         }
     }
     if (funcSwitch === '3'){
 
         if(type === 'color'){
-            return '1';
+            return '-1';
         }
         if(type === 'sound') {
             return '-1';
@@ -98,28 +92,22 @@ export function getUIStyles(type){ //on off switch for styles
             return '1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
             return '-1';
         }
     }
     if (funcSwitch === '4'){
 
         if(type === 'color'){
-            return '1';
+            return '-1';
         }
         if(type === 'sound') {
-            return '1';
+            return '-1';
         }
         if(type === 'shape') {
-            return '-1';
+            return '1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '-1';
+            return '1';
         }
     }
     if (funcSwitch === '5'){
@@ -131,12 +119,9 @@ export function getUIStyles(type){ //on off switch for styles
             return '1';
         }
         if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
             return '-1';
         }
-        if(type === 'position'){
+        if(type === 'text') {
             return '-1';
         }
     }
@@ -146,33 +131,27 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'sound') {
-            return '-1';
+            return '1';
         }
         if(type === 'shape') {
             return '-1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
             return '1';
         }
     }
     if (funcSwitch === '7'){
 
         if(type === 'color'){
-            return '1';
+            return '-1';
         }
         if(type === 'sound') {
             return '1';
         }
         if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
             return '1';
         }
-        if(type === 'position'){
+        if(type === 'text') {
             return '-1';
         }
     }
@@ -182,15 +161,12 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'sound') {
-            return '-1';
+            return '1';
         }
         if(type === 'shape') {
             return '1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
             return '1';
         }
     }
@@ -200,7 +176,7 @@ export function getUIStyles(type){ //on off switch for styles
             return '1';
         }
         if(type === 'sound') {
-            return '1';
+            return '-1';
         }
         if(type === 'shape') {
             return '-1';
@@ -208,14 +184,11 @@ export function getUIStyles(type){ //on off switch for styles
         if(type === 'text') {
             return '-1';
         }
-        if(type === 'position'){
-            return '1';
-        }
     }
     if (funcSwitch === '10'){
 
         if(type === 'color' ){
-            return '-1';
+            return '1';
         }
         if(type === 'sound') {
             return '-1';
@@ -224,9 +197,6 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
             return '1';
         }
     }
@@ -239,37 +209,31 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'shape') {
-            return '-1';
+            return '1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
             return '-1';
         }
     }
     if (funcSwitch === '12'){
 
         if(type === 'color'){
-            return '-1';
+            return '1';
         }
         if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
             return '-1';
         }
-        if(type === 'text') {
+        if(type === 'shape') {
             return '1';
         }
-        if(type === 'position'){
+        if(type === 'text') {
             return '1';
         }
     }
     if (funcSwitch === '13'){
 
         if(type === 'color'){
-            return '-1';
+            return '1';
         }
         if(type === 'sound') {
             return '1';
@@ -278,47 +242,39 @@ export function getUIStyles(type){ //on off switch for styles
             return '-1';
         }
         if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
             return '-1';
         }
     }
     if (funcSwitch === '14'){
 
         if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
             return '1';
         }
-        if(type === 'text') {
+        if(type === 'sound') {
+            return '1';
+        }
+        if(type === 'shape') {
             return '-1';
         }
-        if(type === 'position'){
-            return '-1';
+        if(type === 'text') {
+            return '1';
         }
     }
     if (funcSwitch === '15'){
 
         if(type === 'color'){
-            return '-1';
+            return '1';
         }
         if(type === 'sound') {
             return '1';
         }
         if(type === 'shape') {
-            return '-1';
+            return '1';
         }
         if(type === 'text') {
             return '-1';
         }
-        if(type === 'position'){
-            return '1';
-        }
+    
     }
     if (funcSwitch === '16'){
 
@@ -326,78 +282,6 @@ export function getUIStyles(type){ //on off switch for styles
             return '1';
         }
         if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '17'){
-
-        if(type === 'color'){ //A
-            return '1';
-        }
-        if(type === 'sound') { //B
-            return '-1';
-        }
-        if(type === 'shape') { //C
-            return '-1';
-        }
-        if(type === 'text') { //D
-            return '-1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '18'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '19'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '20'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
             return '1';
         }
         if(type === 'shape') {
@@ -406,225 +290,7 @@ export function getUIStyles(type){ //on off switch for styles
         if(type === 'text') {
             return '1';
         }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '21'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '22'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '23'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '24'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '25'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '26'){
-
-        if(type === 'color' ){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '27'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '28'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '29'){
-
-        if(type === 'color'){
-            return '-1';
-        }
-        if(type === 'sound') {
-            return '-1';
-        }
-        if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '30'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '-1';
-        }
-    }
-    if (funcSwitch === '31'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '1';
-        }
-        if(type === 'text') {
-            return '-1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
-    }
-    if (funcSwitch === '32'){
-
-        if(type === 'color'){
-            return '1';
-        }
-        if(type === 'sound') {
-            return '1';
-        }
-        if(type === 'shape') {
-            return '-1';
-        }
-        if(type === 'text') {
-            return '1';
-        }
-        if(type === 'position'){
-            return '1';
-        }
+    
     }
 
     return funcSwitch;
@@ -765,16 +431,16 @@ export function getSound() {
         return 2;
     }
 }
-export function getBottomPosition(){ // bruh why is this not working?
-    var toggle = getUIStyles('position');
-    if (toggle === '1'){
-        return 300;
-    }if(toggle === '-1'){
-        return 130;
-    }else{
-        return 200;
-    }
-}
+// export function getBottomPosition(){ // bruh why is this not working?
+//     var toggle = getUIStyles('position');
+//     if (toggle === '1'){
+//         return 300;
+//     }if(toggle === '-1'){
+//         return 130;
+//     }else{
+//         return 200;
+//     }
+// }
 
 
 export function getStyles(currentState, bpm) {
@@ -783,7 +449,8 @@ export function getStyles(currentState, bpm) {
             textAlign: 'center',
             alignItems: 'center',
             position: 'absolute',
-            bottom: getBottomPosition(), // changes where bottom of bar animation is
+            //bottom: getBottomPosition(), // changes where bottom of bar animation is
+            bottom: 130,
             width: 300,
             backgroundColor: getBarColor(currentState),
             marginHorizontal: 40,

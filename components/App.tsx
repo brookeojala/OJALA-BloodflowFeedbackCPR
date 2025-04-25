@@ -4,7 +4,6 @@
 
 import React, {useState, useEffect} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -350,7 +349,7 @@ const App = () => {  //state has to be here
   return (
     <>
       <StatusBar />
-      <SafeAreaView style={styles.body}>
+      <View style={styles.body}>
         {/* <Pressable style={styles.scanButton} onPress={ ()=>navigation.navigate("StatusDisplay")}>
           <Text style={styles.scanButtonText}>
             Navigate to display
@@ -385,7 +384,7 @@ const App = () => {  //state has to be here
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />
-      </SafeAreaView>
+      </View>
     </>
   );
 };
